@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Puppy from './puppy'
 import './App.css'
+import 'typeface-roboto';
 
 
 class App extends Component {
