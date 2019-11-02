@@ -37,66 +37,69 @@ class Puppy extends Component {
 
   render() {
     var audio = new Audio(Squeak)
-    const cell = {
-      height: "200px",
-      width: "200px",
-    }
-    const style = {
-      backgroundImage: `url(${this.state.img})`,
-      height: "600px",
-      width: "800px"
+    const styles = {
+      cell: {
+        height: "200px",
+        width: "200px",
+      },
+      bigcell: {
+        height: "400px",
+        width: "400px"
+      },
+      bgCell: {
+        backgroundImage: `url(${this.state.img})`,
+        height: "600px",
+        width: "800px"
+      },
+      insidecell: {
+        marginTop: '150px',
+        marginLeft: '110px',
+        height: '180px',
+        width: '150px'
+      }
     }
 
     //       <div className="App" onMouseDown={this.bat} onMouseUp={this.stare} onMouseEnter={this.stare} onMouseLeave={this.wander} onClick={ () => audio.play() }>
 
 
     return(
-      <div className="App" onMouseDown={this.bat} onMouseUp={this.stare} onMouseEnter={this.stare} onMouseLeave={this.wander} onClick={ () => audio.play() }>
+      <div className="App" >
         <StatusSheet score={this.state.score} />
         <Grid
           container
           direction="row"
-          style={style}
+          style={styles.bgCell}
         >
 
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={cell} />
+            <Box border={1} borderColor="red" style={styles.cell} />
           </Grid>
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={cell} />
+            <Box border={1} borderColor="red" style={styles.cell} />
           </Grid>
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={cell} />
+            <Box border={1} borderColor="red" style={styles.cell} />
           </Grid>
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={cell} />
+            <Box border={1} borderColor="red" style={styles.cell} />
           </Grid>
 
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={cell} />
-          </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={cell} />
-          </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={cell} />
-          </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={cell} />
+            <Box border={1} borderColor="red" style={styles.cell} />
           </Grid>
 
-          <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={cell} />
+          {/* proximity */}
+          <Grid container item xs={6} spacing={0}  onMouseEnter={this.stare} onMouseLeave={this.wander} >
+            <Box border={1} borderColor="red" style={styles.bigcell} >
+              <Box border={1} borderColor="blue" style={styles.insidecell} onMouseDown={this.bat} onMouseUp={this.stare} onClick={ () => audio.play()}/>
+            </Box>
           </Grid>
+
+
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={cell} />
+            <Box border={1} borderColor="red" style={styles.cell}/>
           </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={cell} />
-          </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={cell} />
-          </Grid>
+
 
         </Grid>
 
