@@ -6,6 +6,8 @@ class StatusSheet extends Component {
     return(
       <div>
       {this.props.score}
+      <br />
+      {this.props.eat} / 30
       </div>
     )
   }

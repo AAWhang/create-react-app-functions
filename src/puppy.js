@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Wander from './img/wander.jpg'
 import Bat from './img/bat.jpg'
 import Stare from './img/stare.jpg'
+import Feed from './img/feed.jpg'
 import StatusSheet from './component/statusSheet'
 import Squeak from './sound/Copy of TS5 Squeaky.mp3'
 import Grid from '@material-ui/core/Grid'
@@ -13,12 +14,15 @@ class Puppy extends Component {
     super()
     this.state = {
       img: Wander,
-      score: 0
+      score: 0,
+      eat: 0
     }
     //function binds
     this.stare = this.stare.bind(this)
     this.wander = this.wander.bind(this)
     this.bat = this.bat.bind(this)
+    this.feed = this.feed.bind(this)
+    this.eating = this.eating.bind(this)
   }
 
   stare() {
@@ -33,6 +37,20 @@ class Puppy extends Component {
 
   bat() {
     this.setState({ img: Bat })
+  }
+
+  feed() {
+    this.setState({ img: Feed})
+  }
+
+  eating() {
+    let a = this.state.score
+    let b = this.state.eat
+    if (a > 0) {
+      a--
+      b++
+    }
+    this.setState({ score: a, eat: b })
   }
 
   render() {
@@ -59,12 +77,12 @@ class Puppy extends Component {
       }
     }
 
-    //       <div className="App" onMouseDown={this.bat} onMouseUp={this.stare} onMouseEnter={this.stare} onMouseLeave={this.wander} onClick={ () => audio.play() }>
+    //  <div className="App" onMouseDown={this.bat} onMouseUp={this.stare} onMouseEnter={this.stare} onMouseLeave={this.wander} onClick={ () => audio.play() }>
 
 
     return(
       <div className="App" >
-        <StatusSheet score={this.state.score} />
+        <StatusSheet score={this.state.score} eat={this.state.eat} />
         <Grid
           container
           direction="row"
@@ -84,13 +102,14 @@ class Puppy extends Component {
             <Box border={1} borderColor="red" style={styles.cell} />
           </Grid>
 
-          <Grid container item xs={3} spacing={0} >
+          <Grid container item xs={3} spacing={0} onMouseEnter={this.feed} onMouseLeave={this.wander} onClick={ this.eating }>
             <Box border={1} borderColor="red" style={styles.cell} />
           </Grid>
 
           {/* proximity */}
           <Grid container item xs={6} spacing={0}  onMouseEnter={this.stare} onMouseLeave={this.wander} >
             <Box border={1} borderColor="red" style={styles.bigcell} >
+              {/* toy box */}
               <Box border={1} borderColor="blue" style={styles.insidecell} onMouseDown={this.bat} onMouseUp={this.stare} onClick={ () => audio.play()}/>
             </Box>
           </Grid>
