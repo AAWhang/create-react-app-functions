@@ -17,7 +17,8 @@ class Stage5 extends Component {
       img: Wander,
       score: 0,
       eat: 0,
-      box: "blue"
+      box: "blue",
+      noise: "squeak"
     }
     //function binds
     this.stare = this.stare.bind(this)
@@ -30,19 +31,23 @@ class Stage5 extends Component {
   componentDidMount() {
     let time = 0
     let boxC = "blue"
-    var audio1 = new Audio(Squeak)
-    var mewmew = new Audio(Meow)
+    let audio1 = new Audio(Squeak)
+    let mewmew = new Audio(Meow)
     this.interval = setInterval(() => {
       time++
+      let noisecheck = this.state.noise
       if (time === 10) {
         let rand = Math.floor(Math.random() * Math.floor(2))
+        if (noisecheck === "lock") rand = 0
         console.log(rand)
         if (rand === 0)
           {
             time = 0
+            noisecheck = "meow"
             mewmew.play()
           } else {
             boxC = "green"
+            noisecheck = "squeak"
             audio1.play()
           }
       }
@@ -50,7 +55,8 @@ class Stage5 extends Component {
         time = 0
         boxC = "blue"
       }
-      this.setState({ box: boxC })
+      this.setState({ box: boxC, noise: noisecheck })
+      console.log(this.state.noise)
     }, 1000)
   }
 
@@ -71,8 +77,11 @@ class Stage5 extends Component {
 
   bat() {
     let x = this.state.score
+    let currentSound = this.state.noise
+    if (currentSound === "meow") currentSound = "lock"
     if (this.state.box === "green") x++
-    this.setState({ img: Bat, score: x })
+    this.setState({ img: Bat, score: x, noise: currentSound })
+    console.log(this.state.noise)
   }
 
   feed() {
