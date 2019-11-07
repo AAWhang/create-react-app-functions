@@ -67,7 +67,8 @@ class Puppy extends Component {
       bgCell: {
         backgroundImage: `url(${this.state.img})`,
         height: "600px",
-        width: "800px"
+        width: "800px",
+        color: 'black'
       },
       insidecell: {
         marginTop: '150px',
@@ -90,7 +91,7 @@ class Puppy extends Component {
         >
 
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell} />
+            <Box border={1} borderColor="red" style={styles.cell}> Off </Box>
           </Grid>
           <Grid container item xs={3} spacing={0} >
             <Box border={1} borderColor="red" style={styles.cell} />

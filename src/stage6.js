@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid'
 import { borders } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
 
-class Puppy extends Component {
+class Stage6 extends Component {
   constructor() {
     super()
     this.state = {
@@ -128,4 +128,4 @@ class Puppy extends Component {
   }
 }
 
-export default Puppy;
+export default Stage6;

@@ -12,6 +12,20 @@ class StageForm extends Component {
             <input
               type="radio"
               name="react-tips"
+              value="stage0"
+              checked={this.props.stage === "stage0"}
+              onChange={this.props.change}
+              className="form-check-input"
+            />
+            Off
+          </label>
+        </div>
+
+        <div className="form-check">
+          <label>
+            <input
+              type="radio"
+              name="react-tips"
               value="stage1"
               checked={this.props.stage === "stage1"}
               onChange={this.props.change}

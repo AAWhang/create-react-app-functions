@@ -5,9 +5,9 @@ class StatusSheet extends Component {
   render() {
     return(
       <div>
-      {this.props.score}
+      Bowl: {this.props.score}
       <br />
-      {this.props.eat} / 30
+      Treats eaten: {this.props.eat} / 4
       </div>
     )
   }

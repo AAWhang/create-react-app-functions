@@ -5,17 +5,19 @@ import Stare from './img/stare.jpg'
 import Feed from './img/feed.jpg'
 import StatusSheet from './component/statusSheet'
 import Squeak from './sound/Copy of TS5 Squeaky.mp3'
+import Meow from './sound/Copy of AlleyCat.wav'
 import Grid from '@material-ui/core/Grid'
 import { borders } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
 
-class Puppy extends Component {
+class Stage4 extends Component {
   constructor() {
     super()
     this.state = {
       img: Wander,
       score: 0,
-      eat: 0
+      eat: 0,
+      box: "blue"
     }
     //function binds
     this.stare = this.stare.bind(this)
@@ -25,10 +27,42 @@ class Puppy extends Component {
     this.eating = this.eating.bind(this)
   }
 
+  componentDidMount() {
+    let time = 0
+    let boxC = "blue"
+    var audio1 = new Audio(Squeak)
+    var mewmew = new Audio(Meow)
+    this.interval = setInterval(() => {
+      time++
+      if (time === 10) {
+        let rand = Math.floor(Math.random() * Math.floor(2))
+        console.log(rand)
+        if (rand === 0)
+          {
+            time = 0
+            mewmew.play()
+          } else {
+            boxC = "green"
+            audio1.play()
+          }
+      }
+      if (time === 12) {
+        time = 0
+        boxC = "blue"
+      }
+      this.setState({ box: boxC })
+    }, 1000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+
+
+
   stare() {
-    let x = this.state.score
-    x++
-    this.setState({ img: Stare, score: x })
+    this.setState({ img: Stare })
   }
 
   wander() {
@@ -36,11 +70,13 @@ class Puppy extends Component {
   }
 
   bat() {
-    this.setState({ img: Bat })
+    let x = this.state.score
+    if (this.state.box === "green") x++
+    this.setState({ img: Bat, score: x })
   }
 
   feed() {
-    this.setState({ img: Feed})
+    this.setState({ img: Feed })
   }
 
   eating() {
@@ -111,7 +147,7 @@ class Puppy extends Component {
           <Grid container item xs={6} spacing={0}  onMouseEnter={this.stare} onMouseLeave={this.wander} >
             <Box border={1} borderColor="red" style={styles.bigcell} >
               {/* toy box */}
-              <Box border={1} borderColor="blue" style={styles.insidecell} onMouseDown={this.bat} onMouseUp={this.stare} onClick={ () => audio.play()}/>
+              <Box border={1} borderColor={this.state.box} style={styles.insidecell} onMouseDown={this.bat} onMouseUp={this.stare} onClick={ () => audio.play()}/>
             </Box>
           </Grid>
 
@@ -128,4 +164,4 @@ class Puppy extends Component {
   }
 }
 
-export default Puppy;
+export default Stage4;

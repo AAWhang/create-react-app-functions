@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Off from "./puppy"
 import Stage1 from './stage1'
 import Stage2 from './stage2'
 import Stage3 from './stage3'
@@ -23,6 +24,8 @@ class App extends Component {
   handleStageChange = changeEvent => {
     let x
     switch(changeEvent.target.value) {
+      case "stage0": x = <Off stage={this.selectedStage}/>
+      break
       case "stage1": x = <Stage1 stage={this.selectedStage}/>
       break
       case "stage2": x = <Stage2 stage={this.selectedStage}/>
