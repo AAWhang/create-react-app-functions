@@ -8,14 +8,18 @@ import Squeak from './sound/Copy of TS5 Squeaky.mp3'
 import Grid from '@material-ui/core/Grid'
 import { borders } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
+import Green from './img/green.jpg'
 
 class Puppy extends Component {
   constructor() {
     super()
+    this.mousex = 0
+    this.mousey = 0
     this.state = {
       img: Wander,
       score: 0,
-      eat: 0
+      eat: 0,
+      time: 0
     }
     //function binds
     this.stare = this.stare.bind(this)
@@ -23,6 +27,24 @@ class Puppy extends Component {
     this.bat = this.bat.bind(this)
     this.feed = this.feed.bind(this)
     this.eating = this.eating.bind(this)
+  }
+
+  componentDidMount() {
+    let time = 0
+    this.interval = setInterval(() => {
+      time++
+      this.setState({ time: time })
+    }, 17)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+
+  _onMouseMove(e) {
+    this.mousex = e.pageX
+    this.mousey = e.pageY
   }
 
   stare() {
@@ -75,6 +97,15 @@ class Puppy extends Component {
         marginLeft: '110px',
         height: '180px',
         width: '150px'
+      },
+      boxmove: {
+        height: '150px',
+        width: '150px',
+        float: 'left',
+        position: 'absolute',
+        left: this.mousex,
+        top: this.mousey,
+        backgroundImage: `url(${Green})`
       }
     }
 
@@ -82,12 +113,14 @@ class Puppy extends Component {
 
 
     return(
-      <div className="App" >
+      <div className="App">
+        <div style={styles.boxmove} />
         <StatusSheet score={this.state.score} eat={this.state.eat} />
         <Grid
           container
           direction="row"
           style={styles.bgCell}
+          onMouseMove={this._onMouseMove.bind(this)}
         >
 
           <Grid container item xs={3} spacing={0} >
@@ -122,6 +155,7 @@ class Puppy extends Component {
 
 
         </Grid>
+
 
       </div>
     )
