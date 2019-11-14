@@ -14,32 +14,49 @@ import 'typeface-roboto';
 class App extends Component {
   constructor() {
     super()
+    this.selectedStage = 1
     this.state = {
-      selectedStage: "stage1",
-      stage: <Stage1 stage={this.selectedStage}/>
+      stage: 1
     }
-    //function binds
+    this.nextStage = this.nextStage.bind(this)
+    this.prevStage = this.prevStage.bind(this)
   }
 
-  handleStageChange = changeEvent => {
+  componentDidMount() {
+    this.setState({ stage: <Stage1 next={this.nextStage} prev={this.prevStage}/> })
+  }
+
+  nextStage() {
+    this.selectedStage += 1
+    this.handleStageChange()
+  }
+
+  prevStage() {
+    this.selectedStage -= 1
+    this.handleStageChange()
+  }
+
+
+
+  handleStageChange() {
     let x
-    switch(changeEvent.target.value) {
-      case "stage0": x = <Off stage={this.selectedStage}/>
+    switch(this.selectedStage) {
+      case 0: x = <Off next={this.nextStage} prev={this.prevStage}/>
       break
-      case "stage1": x = <Stage1 stage={this.selectedStage}/>
+      case 1: x = <Stage1 next={this.nextStage} prev={this.prevStage}/>
       break
-      case "stage2": x = <Stage2 stage={this.selectedStage}/>
+      case 2: x = <Stage2 next={this.nextStage} prev={this.prevStage}/>
       break
-      case "stage3": x = <Stage3 stage={this.selectedStage}/>
+      case 3: x = <Stage3 next={this.nextStage} prev={this.prevStage}/>
       break
-      case "stage4": x = <Stage4 stage={this.selectedStage}/>
+      case 4: x = <Stage4 next={this.nextStage} prev={this.prevStage}/>
       break
-      case "stage5": x = <Stage5 stage={this.selectedStage}/>
+      case 5: x = <Stage5 next={this.nextStage} prev={this.prevStage}/>
       break
-      case "stage6": x = <Stage6 stage={this.selectedStage}/>
+      case 6: x = <Stage6 next={this.nextStage} prev={this.prevStage}/>
       break
     }
-    this.setState({ selectedStage: changeEvent.target.value, stage: x })
+    this.setState({ stage: x })
   }
 
 
@@ -47,8 +64,8 @@ class App extends Component {
     return(
       <div>
         <header className="App-header">
+          {this.selectedStage}
           Hello World
-          <StageForm stage={this.state.selectedStage} change={this.handleStageChange}/>
           {this.state.stage}
         </header>
       </div>

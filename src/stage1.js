@@ -9,15 +9,24 @@ import Meow from './sound/Copy of AlleyCat.wav'
 import Grid from '@material-ui/core/Grid'
 import { borders } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
+import Green from './img/green.jpg'
 
 class Stage1 extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
+    this.mousex = 0
+    this.mousey = 0
+    this.clock = 90
+    this.littleClock = 0
+    this.gamestate = 0
+    this.shownext = "hidden"
     this.state = {
       img: Wander,
       score: 0,
       eat: 0,
-      box: "blue"
+      box: "green",
+      time: 0,
+      clock: 90
     }
     //function binds
     this.stare = this.stare.bind(this)
@@ -25,24 +34,25 @@ class Stage1 extends Component {
     this.bat = this.bat.bind(this)
     this.feed = this.feed.bind(this)
     this.eating = this.eating.bind(this)
+    this.fieldCalc = this.fieldCalc.bind(this)
   }
 
   componentDidMount() {
     let time = 0
-    let boxC = "blue"
+    let boxC = "green"
     var audio1 = new Audio(Squeak)
     this.interval = setInterval(() => {
       time++
-      if (time === 10) {
+      this.fieldCalc()
+      this.decTime()
+      this.showhidden()
+      if (time === 600) {
+        time = 0;
         boxC = "green"
         audio1.play()
       }
-      if (time === 15) {
-        time = 0
-        boxC = "blue"
-      }
-      this.setState({ box: boxC })
-    }, 1000)
+      this.setState({ box: boxC, time: time })
+    }, 17)
   }
 
   componentWillUnmount() {
@@ -50,6 +60,59 @@ class Stage1 extends Component {
   }
 
 
+  showhidden() {
+    if (this.state.score > 4) this.shownext = "visible"
+  }
+
+  decTime() {
+    this.littleClock++
+    if (this.littleClock === 60 && this.clock > 0) {
+      this.clock--
+      this.littleClock = 0
+      this.setState({ clock: this.clock })
+    }
+  }
+
+  fieldCalc() {
+    let feeder = document.getElementById('#feeder')
+    let feederRect = feeder.getBoundingClientRect()
+    let proximity = document.getElementById('#proximity')
+    let proximityRect = proximity.getBoundingClientRect()
+    let toy = document.getElementById('#toy')
+    let toyRect = toy.getBoundingClientRect()
+    // console.log(" top: " + feederRect.top + " right: " + feederRect.right + " bottom: " + feederRect.bottom + " left: "  + feederRect.left)
+
+    if (this.mousex > feederRect.left && this.mousex < feederRect.right && this.mousey > feederRect.top && this.mousey < feederRect.bottom) {
+      if (this.gamestate != 1) {
+        this.gamestate = 1
+        console.log("feeder")
+        this.feed()
+      }
+    } else if (this.mousex > toyRect.left && this.mousex < toyRect.right && this.mousey > toyRect.top && this.mousey < toyRect.bottom) {
+      if (this.gamestate != 2) {
+        this.gamestate = 2
+        console.log("toy")
+        this.bat()
+      }
+    } else if (this.mousex > proximityRect.left && this.mousex < proximityRect.right && this.mousey > proximityRect.top && this.mousey < proximityRect.bottom) {
+      if (this.gamestate != 3) {
+        this.gamestate = 3
+        console.log("proximity")
+        this.stare()
+      }
+    } else {
+      this.gamestate = 0
+      console.log("wander")
+      this.wander()
+    }
+
+  }
+
+  _onMouseMove(e) {
+    this.mousex = e.pageX
+    this.mousey = e.pageY
+    console.log("x: " + e.pageX + " y: " + e.pageY)
+  }
 
 
   stare() {
@@ -102,6 +165,18 @@ class Stage1 extends Component {
         marginLeft: '110px',
         height: '180px',
         width: '150px'
+      },
+      boxmove: {
+        height: '150px',
+        width: '150px',
+        float: 'left',
+        position: 'absolute',
+        left: this.mousex + 20,
+        top: this.mousey + 20,
+        backgroundImage: `url(${Green})`
+      },
+      next: {
+        visibility: this.shownext
       }
     }
 
@@ -109,36 +184,38 @@ class Stage1 extends Component {
 
 
     return(
-      <div className="App" >
+      <div className="App">
+
         <StatusSheet score={this.state.score} eat={this.state.eat} />
         <Grid
           container
           direction="row"
           style={styles.bgCell}
+          onMouseMove={this._onMouseMove.bind(this)}
         >
+          <div style={styles.boxmove} />
+          <Grid container item xs={3} spacing={0} >
+            <Box border={1} borderColor="red" style={styles.cell}> 1 <br /> <div onClick={() => this.props.prev()}> prev </div> </Box>
+          </Grid>
+          <Grid container item xs={3} spacing={0} >
+            <Box border={1} borderColor="red" style={styles.cell} />
+          </Grid>
+          <Grid container item xs={3} spacing={0} >
+            <Box border={1} borderColor="red" style={styles.cell} />
+          </Grid>
+          <Grid container item xs={3} spacing={0} >
+            <Box border={1} borderColor="red" style={styles.cell}> {this.state.clock} <br /> <div style={styles.next} onClick={() => this.props.next()}> next </div> </Box>
+          </Grid>
 
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell}> 1 </Box>
-          </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell} />
-          </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell} />
-          </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell} />
-          </Grid>
-
-          <Grid container item xs={3} spacing={0} onMouseEnter={this.feed} onMouseLeave={this.wander} onClick={ this.eating }>
-            <Box border={1} borderColor="red" style={styles.cell} />
+            <Box border={1} borderColor="red" id="#feeder" style={styles.cell} />
           </Grid>
 
           {/* proximity */}
-          <Grid container item xs={6} spacing={0}  onMouseEnter={this.stare} onMouseLeave={this.wander} >
-            <Box border={1} borderColor="red" style={styles.bigcell} >
+          <Grid container item xs={6} spacing={0} >
+            <Box border={1} borderColor="red" id="#proximity" style={styles.bigcell} >
               {/* toy box */}
-              <Box border={1} borderColor={this.state.box} style={styles.insidecell} onMouseDown={this.bat} onMouseUp={this.stare} onClick={ () => audio.play()}/>
+              <Box border={1} borderColor="blue" style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
             </Box>
           </Grid>
 

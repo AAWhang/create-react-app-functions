@@ -17,6 +17,7 @@ class Puppy extends Component {
     this.mousey = 0
     this.clock = 90
     this.littleClock = 0
+    this.gamestate = 0
     this.state = {
       img: Wander,
       score: 0,
@@ -66,14 +67,28 @@ class Puppy extends Component {
     // console.log(" top: " + feederRect.top + " right: " + feederRect.right + " bottom: " + feederRect.bottom + " left: "  + feederRect.left)
 
     if (this.mousex > feederRect.left && this.mousex < feederRect.right && this.mousey > feederRect.top && this.mousey < feederRect.bottom) {
-      console.log("feeder")
+      if (this.gamestate != 1) {
+        this.gamestate = 1
+        console.log("feeder")
+        this.feed()
+      }
     } else if (this.mousex > toyRect.left && this.mousex < toyRect.right && this.mousey > toyRect.top && this.mousey < toyRect.bottom) {
-      console.log("toy")
+      if (this.gamestate != 2) {
+        this.gamestate = 2
+        console.log("toy")
+        this.bat()
+      }
     } else if (this.mousex > proximityRect.left && this.mousex < proximityRect.right && this.mousey > proximityRect.top && this.mousey < proximityRect.bottom) {
-      console.log("proximity")
-    } else (
+      if (this.gamestate != 3) {
+        this.gamestate = 3
+        console.log("proximity")
+        this.stare()
+      }
+    } else {
+      this.gamestate = 0
       console.log("wander")
-    )
+      this.wander()
+    }
 
   }
 
@@ -170,18 +185,18 @@ class Puppy extends Component {
             <Box border={1} borderColor="red" style={styles.cell} />
           </Grid>
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell}> {this.state.clock} </Box>
+            <Box border={1} borderColor="red" style={styles.cell}> {this.state.clock} <br /> <div onClick={() => this.props.next()}> next </div> </Box>
           </Grid>
 
-          <Grid container item xs={3} spacing={0} id="#feeder" onMouseEnter={this.feed} onMouseLeave={this.wander} onClick={ this.eating }>
-            <Box border={1} borderColor="red" style={styles.cell} />
+          <Grid container item xs={3} spacing={0} >
+            <Box border={1} borderColor="red" id="#feeder" style={styles.cell} />
           </Grid>
 
           {/* proximity */}
-          <Grid container item xs={6} spacing={0} id="#proximity" onMouseEnter={this.stare} onMouseLeave={this.wander} >
-            <Box border={1} borderColor="red" style={styles.bigcell} >
+          <Grid container item xs={6} spacing={0} >
+            <Box border={1} borderColor="red" id="#proximity" style={styles.bigcell} >
               {/* toy box */}
-              <Box border={1} borderColor="blue" id="#toy" style={styles.insidecell} onMouseDown={this.bat} onMouseUp={this.stare} onClick={ () => audio.play()}/>
+              <Box border={1} borderColor="blue" style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
             </Box>
           </Grid>
 
