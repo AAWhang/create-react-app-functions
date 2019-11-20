@@ -20,6 +20,7 @@ class Stage1 extends Component {
     this.littleClock = 0
     this.gamestate = 0
     this.shownext = "hidden"
+    this.feeddelay = 0
     this.state = {
       img: Wander,
       score: 0,
@@ -46,6 +47,7 @@ class Stage1 extends Component {
       this.fieldCalc()
       this.decTime()
       this.showhidden()
+      this.feeddelay++
       if (time === 600) {
         time = 0;
         boxC = "green"
@@ -117,7 +119,10 @@ class Stage1 extends Component {
 
   stare() {
     let x = this.state.score
-    if (this.state.box === "green") x++
+    if (this.state.box === "green" && this.feeddelay > 120) {
+      x++
+      this.feeddelay = 0
+    }
     this.setState({ img: Stare, score: x })
   }
 
