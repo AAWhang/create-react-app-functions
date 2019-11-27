@@ -16,7 +16,7 @@ class Stage1 extends Component {
     super(props)
     this.mousex = 0
     this.mousey = 0
-    this.clock = 90
+    this.clock = 10
     this.littleClock = 0
     this.gamestate = 0
     this.shownext = "hidden"
@@ -27,7 +27,7 @@ class Stage1 extends Component {
       eat: 0,
       box: "green",
       time: 0,
-      clock: 90
+      clock: 10
     }
     //function binds
     this.stare = this.stare.bind(this)
@@ -49,9 +49,11 @@ class Stage1 extends Component {
       this.showhidden()
       this.feeddelay++
       if (time === 600) {
+        audio1.play()        
         time = 0;
         boxC = "green"
-        audio1.play()
+        this.clock = 10
+
       }
       this.setState({ box: boxC, time: time })
     }, 17)

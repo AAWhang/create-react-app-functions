@@ -24,6 +24,9 @@ class Puppy extends Component {
     this.gamestate = 0
     this.dogpos = [500,500]
     this.mousepos = [700,500]
+    this.mousesave = [0,0]
+    this.dogsave = [0,0]
+    this.dragflag = false
     this.dogdir = Green
     this.state = {
       img: Wander,
@@ -57,16 +60,23 @@ class Puppy extends Component {
   }
 
   dogfollow() {
-    if (this.dogpos[0] < this.mousepos[0]) {
-      this.dogpos[0] += 5
-      this.dogdir = Red
+    // if (this.dogpos[0] < this.mousepos[0]) {
+    //   this.dogpos[0] += 5
+    //   this.dogdir = Red
+    // }
+    // if (this.dogpos[0] > this.mousepos[0]) {
+    //   this.dogpos[0] -= 5
+    //   this.dogdir = Green
+    // }
+    // if (this.dogpos[1] < this.mousepos[1]) this.dogpos[1] += 5
+    // if (this.dogpos[1] > this.mousepos[1]) this.dogpos[1] -= 5
+    if (this.dragFlag === true) {
+      let leftright = this.dogpos[0]
+      this.dogpos[0] = this.dogsave[0] + this.mousepos[0] - this.mousesave[0]
+      if (this.dogpos[0] < leftright) this.dogdir = Green
+      if (this.dogpos[0] > leftright) this.dogdir = Red
+      this.dogpos[1] = this.dogsave[1] + this.mousepos[1] - this.mousesave[1]
     }
-    if (this.dogpos[0] > this.mousepos[0]) {
-      this.dogpos[0] -= 5
-      this.dogdir = Green
-    }
-    if (this.dogpos[1] < this.mousepos[1]) this.dogpos[1] += 5
-    if (this.dogpos[1] > this.mousepos[1]) this.dogpos[1] -= 5
   }
 
   decTime() {
@@ -118,6 +128,17 @@ class Puppy extends Component {
     this.mousepos = [e.pageX,e.pageY]
   }
 
+  dragOn() {
+    this.dragFlag = true
+    this.mousesave = [...this.mousepos]
+    this.dogsave = [...this.dogpos]
+    console.log(this.dogsave + " " )
+  }
+
+  dragOff() {
+    this.dragFlag = false
+  }
+
   stare() {
     let x = this.state.score
     x++
@@ -161,7 +182,8 @@ class Puppy extends Component {
         backgroundImage: `url(${Blank})`,
         height: "600px",
         width: "800px",
-        color: 'black'
+        color: 'black',
+        userSelect: 'none'
       },
       insidecell: {
         marginTop: '150px',
@@ -174,8 +196,8 @@ class Puppy extends Component {
         width: '150px',
         float: 'left',
         position: 'absolute',
-        left: this.dogpos[0] + 20,
-        top: this.dogpos[1] + 20,
+        left: this.dogpos[0],
+        top: this.dogpos[1],
         backgroundImage: `url(${this.dogdir})`
       }
     }
@@ -191,9 +213,9 @@ class Puppy extends Component {
           container
           direction="row"
           style={styles.bgCell}
-          onMouseDown={this._onMouseMove.bind(this)}
+          onMouseMove={this._onMouseMove.bind(this)}
         >
-          <div style={styles.boxmove} />
+          <div onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} style={styles.boxmove} />
           <Grid container item xs={3} spacing={0} >
             <Box border={1} borderColor="red" style={styles.cell}> Off </Box>
           </Grid>
