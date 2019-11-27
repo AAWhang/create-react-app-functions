@@ -12,7 +12,7 @@ import Green from './img/dogleft.bmp'
 import Red from './img/dogright.bmp'
 import Toy from './img/toy.png'
 import Feeder from './img/PetTutor.jpg'
-import Blank from './img/blank.jpg'
+import Blank from './img/room.jpg'
 
 class Puppy extends Component {
   constructor() {
@@ -98,19 +98,19 @@ class Puppy extends Component {
     // console.log(" top: " + feederRect.top + " right: " + feederRect.right + " bottom: " + feederRect.bottom + " left: "  + feederRect.left)
 
     if (this.dogpos[0] > feederRect.left && this.dogpos[0] < feederRect.right && this.dogpos[1] > feederRect.top && this.dogpos[1] < feederRect.bottom) {
-      if (this.gamestate != 1) {
+      if (this.gamestate !== 1) {
         this.gamestate = 1
         console.log("feeder")
         this.feed()
       }
     } else if (this.dogpos[0] > toyRect.left && this.dogpos[0] < toyRect.right && this.dogpos[1] > toyRect.top && this.dogpos[1] < toyRect.bottom) {
-      if (this.gamestate != 2) {
+      if (this.gamestate !== 2) {
         this.gamestate = 2
         console.log("toy")
         this.bat()
       }
     } else if (this.dogpos[0] > proximityRect.left && this.dogpos[0] < proximityRect.right && this.dogpos[1] > proximityRect.top && this.dogpos[1] < proximityRect.bottom) {
-      if (this.gamestate != 3) {
+      if (this.gamestate !== 3) {
         this.gamestate = 3
         console.log("proximity")
         this.stare()
@@ -171,34 +171,41 @@ class Puppy extends Component {
     var audio = new Audio(Squeak)
     const styles = {
       cell: {
-        height: "200px",
-        width: "200px",
+        height: "100%",
+        width: "100%",
       },
       bigcell: {
-        height: "400px",
-        width: "400px"
+        height: "100%",
+        width: "50%"
       },
       bgCell: {
         backgroundImage: `url(${Blank})`,
+        backgroundRepeat: 'no-repeat',
         height: "600px",
         width: "800px",
         color: 'black',
         userSelect: 'none'
       },
       insidecell: {
-        marginTop: '150px',
-        marginLeft: '0px',
-        height: '180px',
-        width: '150px'
+        marginTop: '130%',
+        height: '30%',
+        width: '70%'
       },
       boxmove: {
-        height: '150px',
-        width: '150px',
+        height: '15%',
+        width: '12%',
         float: 'left',
         position: 'absolute',
         left: this.dogpos[0],
         top: this.dogpos[1],
-        backgroundImage: `url(${this.dogdir})`
+        backgroundImage: `url(${this.dogdir})`,
+        backgroundRepeat: 'no-repeat'
+      },
+      feeder: {
+        marginTop: '80%',
+        marginLeft: '120%',
+        height: '50%',
+        width: '80%'
       }
     }
 
@@ -229,9 +236,6 @@ class Puppy extends Component {
             <Box border={1} borderColor="red" style={styles.cell}> {this.state.clock} <br /> <div onClick={() => this.props.next()}> next </div> </Box>
           </Grid>
 
-          <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell}/>
-          </Grid>
 
           {/* proximity */}
           <Grid container item xs={6} spacing={0} >
@@ -244,7 +248,7 @@ class Puppy extends Component {
 
 
           <Grid container item xs={3} spacing={0} >
-            <img src={Feeder} id="#feeder" style={styles.cell} />
+            <img src={Feeder} id="#feeder" style={styles.feeder} />
           </Grid>
 
 
