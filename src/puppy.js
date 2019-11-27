@@ -224,25 +224,25 @@ class Puppy extends Component {
         >
           <div onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} style={styles.boxmove} />
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell}> Off </Box>
+            <div style={styles.cell}> Off </div>
           </Grid>
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell} />
+            <div style={styles.cell} />
           </Grid>
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell} />
+            <div style={styles.cell} />
           </Grid>
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell}> {this.state.clock} <br /> <div onClick={() => this.props.next()}> next </div> </Box>
+            <div style={styles.cell}> {this.state.clock} <br /> <div onClick={() => this.props.next()}> next </div> </div>
           </Grid>
 
 
           {/* proximity */}
           <Grid container item xs={6} spacing={0} >
-            <Box border={1} borderColor="red" id="#proximity" style={styles.bigcell} >
+            <div id="#proximity" style={styles.bigcell} >
               {/* toy box */}
               <img  src={Toy} style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
-            </Box>
+            </div>
           </Grid>
 
 
