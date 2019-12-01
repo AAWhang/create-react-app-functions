@@ -19,7 +19,7 @@ class Puppy extends Component {
     super()
     this.mousex = 0
     this.mousey = 0
-    this.clock = 90
+    this.clock = 10
     this.littleClock = 0
     this.gamestate = 0
     this.dogpos = [500,500]
@@ -28,12 +28,11 @@ class Puppy extends Component {
     this.dogsave = [0,0]
     this.dragflag = false
     this.dogdir = Green
+    this.img = Wander
+    this.score = 0
+    this.eat = 0
     this.state = {
-      img: Wander,
-      score: 0,
-      eat: 0,
-      time: 0,
-      clock: 90
+      time: 0
     }
     //function binds
     this.stare = this.stare.bind(this)
@@ -76,7 +75,25 @@ class Puppy extends Component {
       if (this.dogpos[0] < leftright) this.dogdir = Green
       if (this.dogpos[0] > leftright) this.dogdir = Red
       this.dogpos[1] = this.dogsave[1] + this.mousepos[1] - this.mousesave[1]
+      this.boundary()
     }
+  }
+
+  boundary() {
+      let staging = document.getElementById('#staging')
+      let stagingRect = staging.getBoundingClientRect()
+      if (stagingRect.left > this.dogpos[0]) {
+        this.dogpos[0] = stagingRect.left
+      }
+      if (stagingRect.right - 150 < this.dogpos[0]) {
+        this.dogpos[0] = stagingRect.right - 150
+      }
+      if (stagingRect.top > this.dogpos[1]) {
+        this.dogpos[1] = stagingRect.top
+      }
+      if(stagingRect.bottom - 125 < this.dogpos[1]) {
+        this.dogpos[1] = stagingRect.bottom - 125
+      }
   }
 
   decTime() {
@@ -84,7 +101,7 @@ class Puppy extends Component {
     if (this.littleClock === 60 && this.clock > 0) {
       this.clock--
       this.littleClock = 0
-      this.setState({ clock: this.clock })
+      if (this.clock === 0) this.clock = 10
     }
   }
 
@@ -140,31 +157,27 @@ class Puppy extends Component {
   }
 
   stare() {
-    let x = this.state.score
-    x++
-    this.setState({ img: Stare, score: x })
+    this.img = Stare
+    this.score++
   }
 
   wander() {
-    this.setState({ img: Wander })
+    this.img = Wander
   }
 
   bat() {
-    this.setState({ img: Bat })
+    this.img = Bat
   }
 
   feed() {
-    this.setState({ img: Feed})
+    this.img = Feed
   }
 
   eating() {
-    let a = this.state.score
-    let b = this.state.eat
-    if (a > 0) {
-      a--
-      b++
+    if (this.score > 0) {
+      this.score--
+      this.eat++
     }
-    this.setState({ score: a, eat: b })
   }
 
   render() {
@@ -215,10 +228,11 @@ class Puppy extends Component {
     return(
       <div className="App">
 
-        <StatusSheet score={this.state.score} eat={this.state.eat} />
+        <StatusSheet score={this.score} eat={this.eat} />
         <Grid
           container
           direction="row"
+          id="#staging"
           style={styles.bgCell}
           onMouseMove={this._onMouseMove.bind(this)}
         >
@@ -233,7 +247,7 @@ class Puppy extends Component {
             <div style={styles.cell} />
           </Grid>
           <Grid container item xs={3} spacing={0} >
-            <div style={styles.cell}> {this.state.clock} <br /> <div onClick={() => this.props.next()}> next </div> </div>
+            <div style={styles.cell}> {this.clock} <br /> <div onClick={() => this.props.next()}> next </div> </div>
           </Grid>
 
 

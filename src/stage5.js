@@ -16,18 +16,17 @@ class Stage5 extends Component {
     super(props)
     this.mousex = 0
     this.mousey = 0
-    this.clock = 90
+    this.clock = 10
     this.littleClock = 0
     this.gamestate = 0
     this.shownext = "hidden"
+    this.noise = "squeak"
+    this.img = Wander
+    this.box = "blue"
+    this.eat = 0
+    this.score = 0
     this.state = {
-      img: Wander,
-      score: 0,
-      eat: 0,
-      box: "blue",
-      noise: "squeak",
-      time: 0,
-      clock: 90
+      time: 0
     }
     //function binds
     this.stare = this.stare.bind(this)
@@ -41,14 +40,14 @@ class Stage5 extends Component {
   componentDidMount() {
     let time = 0
     let boxC = "blue"
-    let audio1 = new Audio(Squeak)
-    let mewmew = new Audio(Meow)
+
+
     this.interval = setInterval(() => {
       time++
       this.fieldCalc()
       this.decTime()
       this.showhidden()
-      let noisecheck = this.state.noise
+      let noisecheck = this.noise
       if (time === 600) {
         let rand = Math.floor(Math.random() * Math.floor(2))
         if (noisecheck === "lock") rand = 0
@@ -57,10 +56,14 @@ class Stage5 extends Component {
           {
             time = 0
             noisecheck = "meow"
+            this.clock = 10
+            let mewmew = new Audio(Meow)
             mewmew.play()
           } else {
             boxC = "green"
             noisecheck = "squeak"
+            this.clock = 12
+            let audio1 = new Audio(Squeak)
             audio1.play()
           }
       }
@@ -68,8 +71,10 @@ class Stage5 extends Component {
         time = 0
         boxC = "blue"
       }
-      this.setState({ box: boxC, noise: noisecheck })
-      console.log(this.state.noise)
+      this.box = boxC
+      this.noise = noisecheck
+      this.setState( { timer: time })
+      console.log(this.noise)
     }, 17)
   }
 
@@ -78,7 +83,7 @@ class Stage5 extends Component {
   }
 
   showhidden() {
-    if (this.state.score > 4) this.shownext = "visible"
+    if (this.score > 4) this.shownext = "visible"
   }
 
   decTime() {
@@ -86,7 +91,6 @@ class Stage5 extends Component {
     if (this.littleClock === 60 && this.clock > 0) {
       this.clock--
       this.littleClock = 0
-      this.setState({ clock: this.clock })
     }
   }
 
@@ -133,34 +137,35 @@ class Stage5 extends Component {
 
 
   stare() {
-    this.setState({ img: Stare })
+    this.img = Stare
   }
 
   wander() {
-    this.setState({ img: Wander })
+    this.img = Wander
   }
 
   bat() {
-    let x = this.state.score
-    let currentSound = this.state.noise
-    if (currentSound === "meow") currentSound = "lock"
-    if (this.state.box === "green") x++
-    this.setState({ img: Bat, score: x, noise: currentSound })
-    console.log(this.state.noise)
+    let x = this.score
+    if (this.noise === "meow") this.noise = "lock"
+    if (this.box === "green") x++
+    this.img = Bat
+    this.score = x
+    console.log(this.noise)
   }
 
   feed() {
-    this.setState({ img: Feed })
+    this.img = Feed
   }
 
   eating() {
-    let a = this.state.score
-    let b = this.state.eat
+    let a = this.score
+    let b = this.eat
     if (a > 0) {
       a--
       b++
     }
-    this.setState({ score: a, eat: b })
+    this.score = a
+    this.eat = b
   }
 
   render() {
@@ -175,7 +180,7 @@ class Stage5 extends Component {
         width: "400px"
       },
       bgCell: {
-        backgroundImage: `url(${this.state.img})`,
+        backgroundImage: `url(${this.img})`,
         height: "600px",
         width: "800px",
         color: 'black'
@@ -205,7 +210,7 @@ class Stage5 extends Component {
 
     return(
       <div className="App" >
-        <StatusSheet score={this.state.score} eat={this.state.eat} />
+        <StatusSheet score={this.score} eat={this.eat} />
         <Grid
           container
           direction="row"
@@ -223,7 +228,7 @@ class Stage5 extends Component {
             <Box border={1} borderColor="red" style={styles.cell} />
           </Grid>
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell}> {this.state.clock} <br /> <div style={styles.next} onClick={() => this.props.next()}> next </div> </Box>
+            <Box border={1} borderColor="red" style={styles.cell}> {this.clock} <br /> <div style={styles.next} onClick={() => this.props.next()}> next </div> </Box>
           </Grid>
 
           <Grid container item xs={3} spacing={0}>
@@ -234,7 +239,7 @@ class Stage5 extends Component {
           <Grid container item xs={6} spacing={0} >
             <Box border={1} borderColor="red" id="#proximity" style={styles.bigcell} >
               {/* toy box */}
-              <Box border={1} borderColor={this.state.box} style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
+              <Box border={1} borderColor={this.box} style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
             </Box>
           </Grid>
 
