@@ -5,28 +5,37 @@ import Stare from './img/stare.jpg'
 import Feed from './img/feed.jpg'
 import StatusSheet from './component/statusSheet'
 import Squeak from './sound/Copy of TS5 Squeaky.mp3'
-import Meow from './sound/Copy of AlleyCat.wav'
 import Grid from '@material-ui/core/Grid'
 import { borders } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
-import Green from './img/green.jpg'
+import Green from './img/dogleft.bmp'
+import Red from './img/dogright.bmp'
+import Toy from './img/toy.png'
+import Feeder from './img/PetTutor.jpg'
+import Blank from './img/room.jpg'
 
 class Stage3 extends Component {
   constructor(props) {
     super(props)
     this.mousex = 0
     this.mousey = 0
-    this.clock = 90
+    this.clock = 10
     this.littleClock = 0
     this.gamestate = 0
+    this.dogpos = [500,500]
+    this.mousepos = [700,500]
+    this.mousesave = [0,0]
+    this.dogsave = [0,0]
+    this.dragflag = false
+    this.dogdir = Green
+    this.img = Wander
+    this.score = 0
+    this.eat = 0
+    this.box = "blue"
     this.shownext = "hidden"
+    this.feeddelay = 0
     this.state = {
-      img: Wander,
-      score: 0,
-      eat: 0,
-      box: "blue",
       time: 0,
-      clock: 90
     }
     //function binds
     this.stare = this.stare.bind(this)
@@ -45,7 +54,9 @@ class Stage3 extends Component {
       time++
       this.fieldCalc()
       this.decTime()
+      this.dogfollow()
       this.showhidden()
+      this.feeddelay++
       if (time === 600) {
         boxC = "green"
         audio1.play()
@@ -54,7 +65,8 @@ class Stage3 extends Component {
         boxC = "blue"
         time = 0
       }
-      this.setState({ box: boxC, time: time  })
+      this.box = boxC
+      this.setState({ time: time })
     }, 17)
   }
 
@@ -62,8 +74,46 @@ class Stage3 extends Component {
     clearInterval(this.interval);
   }
 
+  dogfollow() {
+    // if (this.dogpos[0] < this.mousepos[0]) {
+    //   this.dogpos[0] += 5
+    //   this.dogdir = Red
+    // }
+    // if (this.dogpos[0] > this.mousepos[0]) {
+    //   this.dogpos[0] -= 5
+    //   this.dogdir = Green
+    // }
+    // if (this.dogpos[1] < this.mousepos[1]) this.dogpos[1] += 5
+    // if (this.dogpos[1] > this.mousepos[1]) this.dogpos[1] -= 5
+    if (this.dragFlag === true) {
+      let leftright = this.dogpos[0]
+      this.dogpos[0] = this.dogsave[0] + this.mousepos[0] - this.mousesave[0]
+      if (this.dogpos[0] < leftright) this.dogdir = Green
+      if (this.dogpos[0] > leftright) this.dogdir = Red
+      this.dogpos[1] = this.dogsave[1] + this.mousepos[1] - this.mousesave[1]
+      this.boundary()
+    }
+  }
+
+  boundary() {
+      let staging = document.getElementById('#staging')
+      let stagingRect = staging.getBoundingClientRect()
+      if (stagingRect.left > this.dogpos[0]) {
+        this.dogpos[0] = stagingRect.left
+      }
+      if (stagingRect.right - 150 < this.dogpos[0]) {
+        this.dogpos[0] = stagingRect.right - 150
+      }
+      if (stagingRect.top > this.dogpos[1]) {
+        this.dogpos[1] = stagingRect.top
+      }
+      if(stagingRect.bottom - 125 < this.dogpos[1]) {
+        this.dogpos[1] = stagingRect.bottom - 125
+      }
+  }
+
   showhidden() {
-    if (this.state.score > 4) this.shownext = "visible"
+    if (this.score > 4) this.shownext = "visible"
   }
 
   decTime() {
@@ -71,7 +121,7 @@ class Stage3 extends Component {
     if (this.littleClock === 60 && this.clock > 0) {
       this.clock--
       this.littleClock = 0
-      this.setState({ clock: this.clock })
+      if (this.clock === 0) this.clock = 10
     }
   }
 
@@ -84,20 +134,20 @@ class Stage3 extends Component {
     let toyRect = toy.getBoundingClientRect()
     // console.log(" top: " + feederRect.top + " right: " + feederRect.right + " bottom: " + feederRect.bottom + " left: "  + feederRect.left)
 
-    if (this.mousex > feederRect.left && this.mousex < feederRect.right && this.mousey > feederRect.top && this.mousey < feederRect.bottom) {
-      if (this.gamestate != 1) {
+    if (this.dogpos[0] > feederRect.left && this.dogpos[0] < feederRect.right && this.dogpos[1] > feederRect.top && this.dogpos[1] < feederRect.bottom) {
+      if (this.gamestate !== 1) {
         this.gamestate = 1
         console.log("feeder")
         this.feed()
       }
-    } else if (this.mousex > toyRect.left && this.mousex < toyRect.right && this.mousey > toyRect.top && this.mousey < toyRect.bottom) {
-      if (this.gamestate != 2) {
+    } else if (this.dogpos[0] > toyRect.left && this.dogpos[0] < toyRect.right && this.dogpos[1] > toyRect.top && this.dogpos[1] < toyRect.bottom) {
+      if (this.gamestate !== 2) {
         this.gamestate = 2
         console.log("toy")
         this.bat()
       }
-    } else if (this.mousex > proximityRect.left && this.mousex < proximityRect.right && this.mousey > proximityRect.top && this.mousey < proximityRect.bottom) {
-      if (this.gamestate != 3) {
+    } else if (this.dogpos[0] > proximityRect.left && this.dogpos[0] < proximityRect.right && this.dogpos[1] > proximityRect.top && this.dogpos[1] < proximityRect.bottom) {
+      if (this.gamestate !== 3) {
         this.gamestate = 3
         console.log("proximity")
         this.stare()
@@ -111,72 +161,86 @@ class Stage3 extends Component {
   }
 
   _onMouseMove(e) {
-    this.mousex = e.pageX
-    this.mousey = e.pageY
-    console.log("x: " + e.pageX + " y: " + e.pageY)
+    this.mousepos = [e.pageX,e.pageY]
   }
 
+  dragOn() {
+    this.dragFlag = true
+    this.mousesave = [...this.mousepos]
+    this.dogsave = [...this.dogpos]
+    console.log(this.dogsave + " " )
+  }
 
+  dragOff() {
+    this.dragFlag = false
+  }
 
   stare() {
-    this.setState({ img: Stare })
+    this.img = Stare
   }
 
   wander() {
-    this.setState({ img: Wander })
+    this.img = Wander
   }
 
   bat() {
-    let x = this.state.score
-    if (this.state.box === "green") x++
-    this.setState({ img: Bat, score: x })
+    if (this.box === "green" && this.feeddelay > 120) {
+      this.score++
+      this.feeddelay = 0
+    }
+    this.img = Bat
   }
 
   feed() {
-    this.setState({ img: Feed })
+    this.img = Feed
   }
 
   eating() {
-    let a = this.state.score
-    let b = this.state.eat
-    if (a > 0) {
-      a--
-      b++
+    if (this.score > 0) {
+      this.score--
+      this.eat++
     }
-    this.setState({ score: a, eat: b })
   }
 
   render() {
     var audio = new Audio(Squeak)
     const styles = {
       cell: {
-        height: "200px",
-        width: "200px",
+        height: "100%",
+        width: "100%",
       },
       bigcell: {
-        height: "400px",
-        width: "400px"
+        height: "100%",
+        width: "50%"
       },
       bgCell: {
-        backgroundImage: `url(${this.state.img})`,
+        backgroundImage: `url(${Blank})`,
+        backgroundRepeat: 'no-repeat',
         height: "600px",
         width: "800px",
-        color: 'black'
+        color: 'black',
+        userSelect: 'none'
       },
       insidecell: {
-        marginTop: '150px',
-        marginLeft: '110px',
-        height: '180px',
-        width: '150px'
+        marginTop: '130%',
+        height: '30%',
+        width: '70%'
       },
       boxmove: {
-        height: '150px',
-        width: '150px',
+        height: '15%',
+        width: '12%',
         float: 'left',
         position: 'absolute',
-        left: this.mousex + 20,
-        top: this.mousey + 20,
-        backgroundImage: `url(${Green})`
+        left: this.dogpos[0],
+        top: this.dogpos[1],
+        backgroundImage: `url(${this.dogdir})`,
+        backgroundRepeat: 'no-repeat'
+      },
+      feeder: {
+        marginTop: '80%',
+        marginLeft: '120%',
+        height: '50%',
+        width: '80%'
       },
       next: {
         visibility: this.shownext
@@ -185,49 +249,51 @@ class Stage3 extends Component {
 
     //  <div className="App" onMouseDown={this.bat} onMouseUp={this.stare} onMouseEnter={this.stare} onMouseLeave={this.wander} onClick={ () => audio.play() }>
 
+    // <div style={styles.next} onClick={() => this.props.next()}> next </div>
 
     return(
-      <div className="App" >
-        <StatusSheet score={this.state.score} eat={this.state.eat} />
+      <div className="App">
+
+        <StatusSheet score={this.score} eat={this.eat} />
         <Grid
           container
           direction="row"
+          id="#staging"
           style={styles.bgCell}
           onMouseMove={this._onMouseMove.bind(this)}
         >
-          <div style={styles.boxmove} />
+          <div onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} style={styles.boxmove} />
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell}> 3 <br /> <div onClick={() => this.props.prev()}> prev </div> </Box>
+            <div style={styles.cell}> 3 <br /> <div onClick={() => this.props.prev()}> prev </div> </div>
           </Grid>
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell} />
+            <div style={styles.cell} />
           </Grid>
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell} />
+            <div style={styles.cell} />
           </Grid>
           <Grid container item xs={3} spacing={0} >
-          <Box border={1} borderColor="red" style={styles.cell}> {this.state.clock} <br /> <div style={styles.next} onClick={() => this.props.next()}> next </div> </Box>
+            <div style={styles.cell}> {this.clock} <br /> <div onClick={() => this.props.next()}> next </div> </div>
           </Grid>
 
-          <Grid container item xs={3} spacing={0}>
-            <Box border={1} borderColor="red" id="#feeder" style={styles.cell} />
-          </Grid>
 
           {/* proximity */}
           <Grid container item xs={6} spacing={0} >
-            <Box border={1} borderColor="red" id="#proximity" style={styles.bigcell} >
+            <div id="#proximity" style={styles.bigcell} >
               {/* toy box */}
-              <Box border={1} borderColor={this.state.box} style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
-            </Box>
+              <img  src={Toy} style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
+            </div>
           </Grid>
 
 
+
           <Grid container item xs={3} spacing={0} >
-            <Box border={1} borderColor="red" style={styles.cell}/>
+            <img src={Feeder} id="#feeder" style={styles.feeder} />
           </Grid>
 
 
         </Grid>
+
 
       </div>
     )

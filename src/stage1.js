@@ -249,7 +249,7 @@ class Stage1 extends Component {
     //  <div className="App" onMouseDown={this.bat} onMouseUp={this.stare} onMouseEnter={this.stare} onMouseLeave={this.wander} onClick={ () => audio.play() }>
 
     // <div style={styles.next} onClick={() => this.props.next()}> next </div>
-    
+
     return(
       <div className="App">
 
