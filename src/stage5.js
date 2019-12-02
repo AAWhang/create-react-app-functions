@@ -5,6 +5,8 @@ import Stare from './img/stare.jpg'
 import Feed from './img/feed.jpg'
 import StatusSheet from './component/statusSheet'
 import Squeak from './sound/Copy of TS5 Squeaky.mp3'
+import Bowl from './sound/food in bowl.mp3'
+import Munch from './sound/munch.mp3'
 import Meow from './sound/Copy of AlleyCat.wav'
 import Grid from '@material-ui/core/Grid'
 import { borders } from '@material-ui/system';
@@ -48,6 +50,8 @@ class Stage5 extends Component {
   }
 
   componentDidMount() {
+    let staging = document.getElementById('#staging')
+    let stagingRect = staging.getBoundingClientRect()
     let time = 0
     let boxC = "blue"
     this.interval = setInterval(() => {
@@ -151,11 +155,11 @@ class Stage5 extends Component {
     let toyRect = toy.getBoundingClientRect()
     // console.log(" top: " + feederRect.top + " right: " + feederRect.right + " bottom: " + feederRect.bottom + " left: "  + feederRect.left)
 
-    if (this.dogpos[0] > feederRect.left && this.dogpos[0] < feederRect.right && this.dogpos[1] > feederRect.top && this.dogpos[1] < feederRect.bottom) {
+    if (this.dogpos[0] > feederRect.left - 150 && this.dogpos[0] < feederRect.right && this.dogpos[1] > feederRect.top && this.dogpos[1] < feederRect.bottom) {
       if (this.gamestate !== 1) {
         this.gamestate = 1
         console.log("feeder")
-        this.feed()
+        this.eating()
       }
     } else if (this.dogpos[0] > toyRect.left && this.dogpos[0] < toyRect.right && this.dogpos[1] > toyRect.top && this.dogpos[1] < toyRect.bottom) {
       if (this.gamestate !== 2) {
@@ -202,11 +206,14 @@ class Stage5 extends Component {
   }
 
   bat() {
-    let x = this.score
     if (this.noise === "meow") this.noise = "lock"
-    if (this.box === "green") x++
-    this.img = Bat
-    this.score = x
+    if (this.box === "green" && this.feeddelay > 120) {
+      var bowl = new Audio(Bowl)
+      bowl.play()
+      this.img = Bat
+      this.score++
+      this.feeddelay = 0
+    }
     console.log(this.noise)
   }
 
@@ -215,9 +222,12 @@ class Stage5 extends Component {
   }
 
   eating() {
-    if (this.score > 0) {
+    if (this.score > 0 && this.feeddelay > 120) {
+      var munch = new Audio(Munch)
+      munch.play()
       this.score--
       this.eat++
+      this.feeddelay = 0
     }
   }
 

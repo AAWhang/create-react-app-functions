@@ -44,6 +44,9 @@ class Puppy extends Component {
   }
 
   componentDidMount() {
+    let staging = document.getElementById('#staging')
+    let stagingRect = staging.getBoundingClientRect()
+    this.dogpos = [stagingRect.left + 330,stagingRect.top + 400]
     let time = 0
     this.interval = setInterval(() => {
       time++
@@ -114,7 +117,7 @@ class Puppy extends Component {
     let toyRect = toy.getBoundingClientRect()
     // console.log(" top: " + feederRect.top + " right: " + feederRect.right + " bottom: " + feederRect.bottom + " left: "  + feederRect.left)
 
-    if (this.dogpos[0] > feederRect.left && this.dogpos[0] < feederRect.right && this.dogpos[1] > feederRect.top && this.dogpos[1] < feederRect.bottom) {
+    if (this.dogpos[0] > feederRect.left - 150 && this.dogpos[0] < feederRect.right && this.dogpos[1] > feederRect.top && this.dogpos[1] < feederRect.bottom) {
       if (this.gamestate !== 1) {
         this.gamestate = 1
         console.log("feeder")
