@@ -29,7 +29,7 @@ function initializeHotJar() {
 class App extends Component {
   constructor() {
     initializeReactGA();
-    initializeHotJar();
+    // initializeHotJar();
     super();
     this.selectedStage = 1;
     this.state = {
