@@ -311,7 +311,10 @@ class Stage1 extends Component {
           <Grid container item xs={3} spacing={0}>
             <div style={styles.cell}>
               {" "}
-              1 <br /> <div onClick={() => this.props.prev()}> prev </div>{" "}
+              Level 1 <br /> <div onClick={() => this.props.prev()}>
+                {" "}
+                prev{" "}
+              </div>{" "}
             </div>
           </Grid>
           <Grid container item xs={3} spacing={0}>
