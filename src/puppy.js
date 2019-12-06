@@ -5,13 +5,15 @@ import Stare from './img/stare.jpg'
 import Feed from './img/feed.jpg'
 import StatusSheet from './component/statusSheet'
 import Squeak from './sound/Copy of TS5 Squeaky.mp3'
+import Bowl from './sound/food in bowl.mp3'
+import Munch from './sound/munch.mp3'
 import Grid from '@material-ui/core/Grid'
 import { borders } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
-import Green from './img/dogleft.bmp'
-import Red from './img/dogright.bmp'
-import Toy from './img/toy.png'
-import Feeder from './img/PetTutor.jpg'
+import Green from './img/dogleft.png'
+import Red from './img/dogright.png'
+import Toy from './img/toy1.png'
+import Feeder from './img/Feeder0.png'
 import Blank from './img/room.jpg'
 
 class Puppy extends Component {
@@ -22,7 +24,7 @@ class Puppy extends Component {
     this.clock = 10
     this.littleClock = 0
     this.gamestate = 0
-    this.dogpos = [500,500]
+    this.dogpos = [320,500]
     this.mousepos = [700,500]
     this.mousesave = [0,0]
     this.dogsave = [0,0]
@@ -208,8 +210,8 @@ class Puppy extends Component {
         width: '70%'
       },
       boxmove: {
-        height: '15%',
-        width: '12%',
+        height: '100%',
+        width: '100%',
         float: 'left',
         position: 'absolute',
         left: this.dogpos[0],

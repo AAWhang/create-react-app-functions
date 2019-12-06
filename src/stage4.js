@@ -11,10 +11,14 @@ import Meow from './sound/Copy of AlleyCat.wav'
 import Grid from '@material-ui/core/Grid'
 import { borders } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
-import Green from './img/dogleft.bmp'
-import Red from './img/dogright.bmp'
-import Toy from './img/toy.png'
-import Feeder from './img/PetTutor.jpg'
+import Green from './img/dogleft.png'
+import Red from './img/dogright.png'
+import Toy from './img/toy1.png'
+import Toytilt from './img/toy2.png'
+import Feeder from './img/Feeder0.png'
+import Feeder1 from './img/Feeder1.png'
+import Feeder2 from './img/Feeder2.png'
+import Feeder3 from './img/Feeder3.png'
 import Blank from './img/room.jpg'
 
 class Stage4 extends Component {
@@ -25,7 +29,7 @@ class Stage4 extends Component {
     this.clock = 10
     this.littleClock = 0
     this.gamestate = 0
-    this.dogpos = [500,500]
+    this.dogpos = [320,500]
     this.mousepos = [700,500]
     this.mousesave = [0,0]
     this.dogsave = [0,0]
@@ -37,6 +41,7 @@ class Stage4 extends Component {
     this.box = "blue"
     this.shownext = "hidden"
     this.feeddelay = 0
+    this.soundalternator = 0
     this.state = {
       time: 0,
     }
@@ -52,7 +57,7 @@ class Stage4 extends Component {
   componentDidMount() {
     let staging = document.getElementById('#staging')
     let stagingRect = staging.getBoundingClientRect()
-    this.dogpos = [stagingRect.left + 330,stagingRect.top + 400]
+    this.dogpos = [stagingRect.left + 330,stagingRect.top + 300]
     let time = 0
     let boxC = "blue"
     var audio1 = new Audio(Squeak)
@@ -63,23 +68,24 @@ class Stage4 extends Component {
       this.decTime()
       this.dogfollow()
       this.showhidden()
+      this.feederstatus()
       this.feeddelay++
       if (time === 600) {
-        let rand = Math.floor(Math.random() * Math.floor(2))
-        console.log(rand)
-        if (rand === 0)
+        if (this.soundalternator === 1)
           {
             time = 0
             this.clock = 10
+            this.soundalternator = 0
             mewmew.play()
-          } else {
+          } else if (this.soundalternator === 0) {
+            time = 0
             boxC = "green"
-            this.clock = 12
+            this.clock = 10
+            this.soundalternator = 1
             audio1.play()
           }
       }
-      if (time === 720) {
-        time = 0
+      if (time === 120 && boxC === "green") {
         boxC = "blue"
       }
       this.box = boxC
@@ -89,6 +95,19 @@ class Stage4 extends Component {
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  }
+
+  feederstatus() {
+      switch (this.score) {
+        case 0: this.feederimg = Feeder
+        break
+        case 1: this.feederimg = Feeder1
+        break
+        case 2: this.feederimg = Feeder2
+        break
+        case 3: this.feederimg = Feeder3
+        break
+      }
   }
 
   dogfollow() {
@@ -156,7 +175,7 @@ class Stage4 extends Component {
         console.log("feeder")
         this.eating()
       }
-    } else if (this.dogpos[0] > toyRect.left && this.dogpos[0] < toyRect.right && this.dogpos[1] > toyRect.top && this.dogpos[1] < toyRect.bottom) {
+    } else if (this.dogpos[0] > toyRect.left && this.dogpos[0] < toyRect.right && this.dogpos[1] + 120 > toyRect.top && this.dogpos[1] < toyRect.bottom) {
       if (this.gamestate !== 2) {
         this.gamestate = 2
         console.log("toy")
@@ -193,11 +212,11 @@ class Stage4 extends Component {
   }
 
   stare() {
-    this.img = Stare
+    this.toyimg = Toy
   }
 
   wander() {
-    this.img = Wander
+    this.toyimg = Toy
   }
 
   bat() {
@@ -207,7 +226,7 @@ class Stage4 extends Component {
       this.score++
       this.feeddelay = 0
     }
-    this.img = Bat
+    this.toyimg = Toytilt
   }
 
   feed() {
@@ -249,8 +268,8 @@ class Stage4 extends Component {
         width: '70%'
       },
       boxmove: {
-        height: '15%',
-        width: '12%',
+        height: '100%',
+        width: '100%',
         float: 'left',
         position: 'absolute',
         left: this.dogpos[0],
@@ -303,14 +322,14 @@ class Stage4 extends Component {
           <Grid container item xs={6} spacing={0} >
             <div id="#proximity" style={styles.bigcell} >
               {/* toy box */}
-              <img  src={Toy} style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
+              <img  src={this.toyimg} style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
             </div>
           </Grid>
 
 
 
           <Grid container item xs={3} spacing={0} >
-            <img src={Feeder} id="#feeder" style={styles.feeder} />
+            <img src={this.feederimg} id="#feeder" style={styles.feeder} />
           </Grid>
 
 
