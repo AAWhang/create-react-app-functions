@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 import Landing from "./landing";
-import Off from "./puppy"
-import Stage1 from './stage1'
-import Stage2 from './stage2'
-import Stage3 from './stage3'
-import Stage4 from './stage4'
-import Stage5 from './stage5'
-import Stage6 from './stage6'
-import StageForm from './component/stageForm'
-import './App.css'
-import 'typeface-roboto';
+import Off from "./puppy";
+import Stage1 from "./stage1";
+import Stage2 from "./stage2";
+import Stage3 from "./stage3";
+import Stage4 from "./stage4";
+import Stage5 from "./stage5";
+import Stage6 from "./stage6";
+import StageForm from "./component/stageForm";
+import "./App.css";
+import "typeface-roboto";
 import ReactGA from "react-ga";
 import { hotjar } from "react-hotjar";
 import GameOverSound from "./sound/Copy of Game End 1.mp3";
@@ -26,38 +26,37 @@ function initializeHotJar() {
   hotjar.initialize(1584254, 6);
 }
 
-
 class App extends Component {
   constructor() {
     initializeReactGA();
     // initializeHotJar();
-    super()
-    this.selectedStage = 1
+    super();
+    this.selectedStage = 1;
     this.state = {
       isStarted: false,
       stage: 1,
       prizeType: null,
       nextPrize: prizes[3]
-    }
-    this.nextStage = this.nextStage.bind(this)
-    this.prevStage = this.prevStage.bind(this)
+    };
+    this.nextStage = this.nextStage.bind(this);
+    this.prevStage = this.prevStage.bind(this);
   }
 
   componentDidMount() {
-    this.setState({ stage: <Stage1 next={this.nextStage} prev={this.prevStage}/> })
+    this.setState({
+      stage: <Stage1 next={this.nextStage} prev={this.prevStage} />
+    });
   }
 
   nextStage() {
-    this.selectedStage += 1
-    this.handleStageChange()
+    this.selectedStage += 1;
+    this.handleStageChange();
   }
 
   prevStage() {
-    this.selectedStage -= 1
-    this.handleStageChange()
+    this.selectedStage -= 1;
+    this.handleStageChange();
   }
-
-
 
   handleStageChange() {
     let x;
@@ -94,7 +93,6 @@ class App extends Component {
     }
     this.setState({ stage: x, prizeType: prizeType, nextPrize: nextPrize });
   }
-
 
   render() {
     let hasCurrentPrize = this.state.prizeType !== null;

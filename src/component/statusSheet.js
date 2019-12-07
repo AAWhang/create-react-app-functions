@@ -1,16 +1,15 @@
-import React, { Component } from 'react'
-
+import React, { Component } from "react";
 
 class StatusSheet extends Component {
   render() {
-    return(
+    return (
       <div>
-      Bowl: {this.props.score}
-      <br />
-      Treats eaten: {this.props.eat} / 4
+        Treats earned: {this.props.score}
+        <br />
+        Calories consumed: {this.props.eat}
       </div>
-    )
+    );
   }
 }
 
-export default StatusSheet
+export default StatusSheet;
