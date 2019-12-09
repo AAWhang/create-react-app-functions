@@ -20,6 +20,8 @@ import Feeder1 from './img/Feeder1.png'
 import Feeder2 from './img/Feeder2.png'
 import Feeder3 from './img/Feeder3.png'
 import Blank from './img/room.jpg'
+import Popup from "./popup";
+import ReactGA from "react-ga";
 
 class Stage4 extends Component {
   constructor(props) {
@@ -43,7 +45,8 @@ class Stage4 extends Component {
     this.feeddelay = 0
     this.soundalternator = 0
     this.state = {
-      time: 0,
+      isRunning: false,
+      time: 0
     }
     //function binds
     this.stare = this.stare.bind(this)
@@ -63,6 +66,9 @@ class Stage4 extends Component {
     var audio1 = new Audio(Squeak)
     var mewmew = new Audio(Meow)
     this.interval = setInterval(() => {
+      if (!this.state.isRunning) {
+        return;
+      }
       time++
       this.fieldCalc()
       this.decTime()
@@ -91,6 +97,10 @@ class Stage4 extends Component {
       this.box = boxC
       this.setState({ time: time })
     }, 17)
+    ReactGA.event({
+      category: "Levels",
+      action: "Started Level 4"
+    });
   }
 
   componentWillUnmount() {
@@ -294,7 +304,14 @@ class Stage4 extends Component {
 
     return(
       <div className="App">
-
+        <Popup
+          show={!this.state.isRunning}
+          title="Level 4"
+          body="Explanation of Level 4 rules goes here."
+          onStart={() => {
+            this.setState({ isRunning: true });
+          }}
+        />
         <StatusSheet score={this.score} eat={this.eat} />
         <Grid
           container
@@ -305,7 +322,13 @@ class Stage4 extends Component {
         >
           <div onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} style={styles.boxmove} />
           <Grid container item xs={3} spacing={0} >
-            <div style={styles.cell}> 4 <br /> <div onClick={() => this.props.prev()}> prev </div> </div>
+            <div style={styles.cell}>
+              {" "}
+              Level 4 <br /> <div onClick={() => this.props.prev()}>
+                {" "}
+                prev{" "}
+              </div>{" "}
+            </div>
           </Grid>
           <Grid container item xs={3} spacing={0} >
             <div style={styles.cell} />
@@ -314,7 +337,11 @@ class Stage4 extends Component {
             <div style={styles.cell} />
           </Grid>
           <Grid container item xs={3} spacing={0} >
-            <div style={styles.cell}> {this.clock} <br /> <div onClick={() => this.props.next()}> next </div> </div>
+            <div style={styles.cell}>
+              {" "}
+              {this.clock} <br />{" "}
+              <div onClick={() => this.props.next()}> next </div>{" "}
+            </div>
           </Grid>
 
 

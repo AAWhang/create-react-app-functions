@@ -20,6 +20,8 @@ import Feeder1 from './img/Feeder1.png'
 import Feeder2 from './img/Feeder2.png'
 import Feeder3 from './img/Feeder3.png'
 import Blank from './img/room.jpg'
+import Popup from "./popup";
+import ReactGA from "react-ga";
 
 class Stage6 extends Component {
   constructor(props) {
@@ -42,6 +44,7 @@ class Stage6 extends Component {
     this.shownext = "hidden"
     this.feeddelay = 0
     this.state = {
+      isRunning: false,
       time: 0,
     }
     //function binds
@@ -62,6 +65,9 @@ class Stage6 extends Component {
     var audio1 = new Audio(Squeak)
     var mewmew = new Audio(Meow)
     this.interval = setInterval(() => {
+      if (!this.state.isRunning) {
+        return;
+      }
       time++
       this.fieldCalc()
       this.decTime()
@@ -111,6 +117,10 @@ class Stage6 extends Component {
       this.box = boxC
       this.setState({ time: time })
     }, 17)
+    ReactGA.event({
+      category: "Levels",
+      action: "Started Level 6"
+    });
   }
 
   componentWillUnmount() {
@@ -314,7 +324,14 @@ class Stage6 extends Component {
 
       return(
         <div className="App">
-
+          <Popup
+            show={!this.state.isRunning}
+            title="Level 6"
+            body="Explanation of Level 6 rules goes here."
+            onStart={() => {
+              this.setState({ isRunning: true });
+            }}
+          />
           <StatusSheet score={this.score} eat={this.eat} />
           <Grid
             container
@@ -325,7 +342,13 @@ class Stage6 extends Component {
           >
             <div onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} style={styles.boxmove} />
             <Grid container item xs={3} spacing={0} >
-              <div style={styles.cell}> 6 <br /> <div onClick={() => this.props.prev()}> prev </div> </div>
+              <div style={styles.cell}>
+                {" "}
+                Level 6 <br /> <div onClick={() => this.props.prev()}>
+                  {" "}
+                  prev{" "}
+                </div>{" "}
+              </div>
             </Grid>
             <Grid container item xs={3} spacing={0} >
               <div style={styles.cell} />
@@ -334,7 +357,10 @@ class Stage6 extends Component {
               <div style={styles.cell} />
             </Grid>
             <Grid container item xs={3} spacing={0} >
-              <div style={styles.cell}> {this.clock} <br /> </div>
+              <div style={styles.cell}>
+                {" "}
+                {this.clock} <br />{" "}
+              </div>
             </Grid>
 
 
