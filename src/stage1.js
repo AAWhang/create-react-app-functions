@@ -19,6 +19,10 @@ import Feeder1 from './img/Feeder1.png'
 import Feeder2 from './img/Feeder2.png'
 import Feeder3 from './img/Feeder3.png'
 import Timer from './img/timer.png'
+import Frame1 from './img/frame1.png'
+import Frame2 from './img/frame2.png'
+import Frame3 from './img/frame3.png'
+import Frame4 from './img/frame4.png'
 import Blank from './img/room.jpg'
 import Popup from "./popup";
 import ReactGA from "react-ga";
@@ -304,6 +308,36 @@ class Stage1 extends Component {
         float: 'right',
         top: '20%',
         left: '-50%'
+      },
+      frame1: {
+        height: '100%',
+        width: '100%',
+        backgroundImage: `url(${Frame1})`,
+        backgroundRepeat: 'no-repeat',
+      },
+      frame2: {
+        height: '100%',
+        width: '100%',
+        backgroundImage: `url(${Frame2})`,
+        backgroundRepeat: 'no-repeat',
+      },
+      frame3: {
+        height: '100%',
+        width: '100%',
+        backgroundImage: `url(${Frame3})`,
+        backgroundRepeat: 'no-repeat',
+      },
+      frame4: {
+        height: '100%',
+        width: '100%',
+        backgroundImage: `url(${Frame4})`,
+        backgroundRepeat: 'no-repeat',
+      },
+      frametext: {
+        position: 'relative',
+        float: 'right',
+        top: '10%',
+        left: '-40%'
       }
     }
 
@@ -321,7 +355,6 @@ class Stage1 extends Component {
             this.setState({ isRunning: true });
           }}
         />
-        <StatusSheet score={this.score} eat={this.eat} />
         <Grid
           container
           direction="row"
@@ -333,24 +366,24 @@ class Stage1 extends Component {
           <Grid container item xs={3} spacing={0} >
             <div style={styles.cell}>
               {" "}
-              Level 1 <br /> <div onClick={() => this.props.prev()}>
-                {" "}
-                prev{" "}
-              </div>{" "}
-            </div>
-          </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <div style={styles.cell} />
-          </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <div style={styles.cell} />
-          </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <div style={styles.cell}>
+              <div style={styles.frame1}> <span style={styles.frametext}>Level 1</span></div> <br />
               {" "}
               <div style={styles.timer}>
                 <span style={styles.timertext}> {this.clock} </span>
               </div>
+            </div>
+          </Grid>
+          <Grid container item xs={3} spacing={0} >
+            <div style={styles.cell}>
+            <div style={styles.frame2}> <span style={styles.frametext}>Treats <br /> earned: <br /> {this.score} </span></div>
+            </div>
+          </Grid>
+          <Grid container item xs={3} spacing={0} >
+            <div style={styles.frame3}> <span style={styles.frametext}>Treats <br /> eaten: <br /> {this.eat}</span></div>
+          </Grid>
+          <Grid container item xs={3} spacing={0} >
+            <div style={styles.cell}>
+            <div style={styles.frame4}> <span style={styles.frametext}>Next <br /> prize: <br /> 3 wishes</span></div>
               <div onClick={() => this.props.next()}> next </div>{" "}
               <div style={styles.next} onClick={() => this.props.next()}> next </div>{" "}
             </div>
