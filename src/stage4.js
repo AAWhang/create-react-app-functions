@@ -179,13 +179,13 @@ class Stage4 extends Component {
     let toyRect = toy.getBoundingClientRect()
     // console.log(" top: " + feederRect.top + " right: " + feederRect.right + " bottom: " + feederRect.bottom + " left: "  + feederRect.left)
 
-    if (this.dogpos[0] > feederRect.left - 150 && this.dogpos[0] < feederRect.right && this.dogpos[1] > feederRect.top && this.dogpos[1] < feederRect.bottom) {
+    if (this.dogpos[0] > feederRect.left - 150 && this.dogpos[0] < feederRect.right && this.dogpos[1] + 225 > feederRect.top && this.dogpos[1] < feederRect.bottom) {
       if (this.gamestate !== 1) {
         this.gamestate = 1
         console.log("feeder")
         this.eating()
       }
-    } else if (this.dogpos[0] > toyRect.left && this.dogpos[0] < toyRect.right && this.dogpos[1] + 120 > toyRect.top && this.dogpos[1] < toyRect.bottom) {
+    } else if (this.dogpos[0] > toyRect.left && this.dogpos[0] < toyRect.right && this.dogpos[1] + 225 > toyRect.top && this.dogpos[1] < toyRect.bottom) {
       if (this.gamestate !== 2) {
         this.gamestate = 2
         console.log("toy")
@@ -244,12 +244,11 @@ class Stage4 extends Component {
   }
 
   eating() {
-    if (this.score > 0 && this.feeddelay > 120) {
+    if (this.score > 0) {
       var munch = new Audio(Munch)
       munch.play()
       this.score--
       this.eat++
-      this.feeddelay = 0
     }
   }
 

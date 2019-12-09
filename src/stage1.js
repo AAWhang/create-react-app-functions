@@ -18,6 +18,7 @@ import Feeder from './img/Feeder0.png'
 import Feeder1 from './img/Feeder1.png'
 import Feeder2 from './img/Feeder2.png'
 import Feeder3 from './img/Feeder3.png'
+import Timer from './img/timer.png'
 import Blank from './img/room.jpg'
 import Popup from "./popup";
 import ReactGA from "react-ga";
@@ -44,6 +45,7 @@ class Stage1 extends Component {
     this.feeddelay = 0
     this.feederimg = Feeder
     this.toyimg = Toy
+    this.eatlog = []
     this.state = {
       isRunning: false,
       time: 0,
@@ -69,6 +71,7 @@ class Stage1 extends Component {
         return;
       }
       time++
+
       this.fieldCalc()
       this.decTime()
       this.dogfollow()
@@ -94,6 +97,8 @@ class Stage1 extends Component {
   componentWillUnmount() {
     clearInterval(this.interval);
   }
+
+
 
   feederstatus() {
       switch (this.score) {
@@ -147,7 +152,7 @@ class Stage1 extends Component {
   }
 
   showhidden() {
-    if (this.score > 4) this.shownext = "visible"
+    if (this.eatlog.length >= 3 && this.eatlog[this.eatlog.length -1] - this.eatlog[this.eatlog.length - 3] < 10000) this.shownext = "visible"
   }
 
   decTime() {
@@ -168,13 +173,13 @@ class Stage1 extends Component {
     let toyRect = toy.getBoundingClientRect()
     // console.log(" top: " + feederRect.top + " right: " + feederRect.right + " bottom: " + feederRect.bottom + " left: "  + feederRect.left)
 
-    if (this.dogpos[0] > feederRect.left - 150 && this.dogpos[0] < feederRect.right && this.dogpos[1] > feederRect.top && this.dogpos[1] < feederRect.bottom) {
+    if (this.dogpos[0] > feederRect.left - 150 && this.dogpos[0] < feederRect.right && this.dogpos[1] + 225 > feederRect.top && this.dogpos[1] < feederRect.bottom) {
       if (this.gamestate !== 1) {
         this.gamestate = 1
         console.log("feeder")
         this.eating()
       }
-    } else if (this.dogpos[0] > toyRect.left && this.dogpos[0] < toyRect.right && this.dogpos[1] + 120 > toyRect.top && this.dogpos[1] < toyRect.bottom) {
+    } else if (this.dogpos[0] > toyRect.left && this.dogpos[0] < toyRect.right && this.dogpos[1] + 225 > toyRect.top && this.dogpos[1] < toyRect.bottom) {
       if (this.gamestate !== 2) {
         this.gamestate = 2
         console.log("toy")
@@ -215,6 +220,9 @@ class Stage1 extends Component {
       bowl.play()
       this.score++
       this.feeddelay = 0
+      let now = new Date()
+      this.eatlog.push(now.getTime())
+      console.log(this.eatlog)
     }
     this.toyimg = Toy
   }
@@ -232,12 +240,11 @@ class Stage1 extends Component {
   }
 
   eating() {
-    if (this.score > 0 && this.feeddelay > 120) {
+    if (this.score > 0) {
       var munch = new Audio(Munch)
       munch.play()
-      this.score--
+      this.score = 0
       this.eat++
-      this.feeddelay = 0
     }
   }
 
@@ -283,6 +290,20 @@ class Stage1 extends Component {
       },
       next: {
         visibility: this.shownext
+      },
+      timer: {
+        height: '100%',
+        width: '100%',
+        backgroundImage: `url(${Timer})`,
+        backgroundRepeat: 'no-repeat',
+      },
+      timertext: {
+        fontSize: 60,
+        color: 'red',
+        position: 'relative',
+        float: 'right',
+        top: '20%',
+        left: '-50%'
       }
     }
 
@@ -327,8 +348,11 @@ class Stage1 extends Component {
           <Grid container item xs={3} spacing={0} >
             <div style={styles.cell}>
               {" "}
-              {this.clock} <br />{" "}
+              <div style={styles.timer}>
+                <span style={styles.timertext}> {this.clock} </span>
+              </div>
               <div onClick={() => this.props.next()}> next </div>{" "}
+              <div style={styles.next} onClick={() => this.props.next()}> next </div>{" "}
             </div>
           </Grid>
 
