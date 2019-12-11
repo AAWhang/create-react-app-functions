@@ -19,6 +19,22 @@ import Feeder from './img/Feeder0.png'
 import Feeder1 from './img/Feeder1.png'
 import Feeder2 from './img/Feeder2.png'
 import Feeder3 from './img/Feeder3.png'
+import Timer from './img/timer.png'
+import Frame1 from './img/frame1.png'
+import Frame2 from './img/frame2.png'
+import Frame3 from './img/frame3.png'
+import Frame4 from './img/frame4.png'
+import Timer00 from './img/timer00.png'
+import Timer01 from './img/timer01.png'
+import Timer02 from './img/timer02.png'
+import Timer03 from './img/timer03.png'
+import Timer04 from './img/timer04.png'
+import Timer05 from './img/timer05.png'
+import Timer06 from './img/timer06.png'
+import Timer07 from './img/timer07.png'
+import Timer08 from './img/timer08.png'
+import Timer09 from './img/timer09.png'
+import Timer10 from './img/timer10.png'
 import Blank from './img/room.jpg'
 import Popup from "./popup";
 import ReactGA from "react-ga";
@@ -44,9 +60,13 @@ class Stage5 extends Component {
     this.shownext = "hidden"
     this.feeddelay = 0
     this.soundalternator = 0
+    this.feederimg = Feeder
+    this.toyimg = Toy
+    this.eatlog = []
+    this.clockimg = Timer10
     this.state = {
-      isRunning: false,
-      time: 0
+      isRunning: true,
+      time: 0,
     }
     //function binds
     this.stare = this.stare.bind(this)
@@ -73,6 +93,7 @@ class Stage5 extends Component {
       this.dogfollow()
       this.showhidden()
       this.feederstatus()
+      this.clockstatus()
       this.feeddelay++
       let noisecheck = this.noise
       if (time === 600) {
@@ -111,6 +132,34 @@ class Stage5 extends Component {
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  }
+
+
+  clockstatus() {
+      switch (this.clock) {
+        case 0: this.clockimg = Timer00
+        break
+        case 1: this.clockimg = Timer01
+        break
+        case 2: this.clockimg = Timer02
+        break
+        case 3: this.clockimg = Timer03
+        break
+        case 4: this.clockimg = Timer04
+        break
+        case 5: this.clockimg = Timer05
+        break
+        case 6: this.clockimg = Timer06
+        break
+        case 7: this.clockimg = Timer07
+        break
+        case 8: this.clockimg = Timer08
+        break
+        case 9: this.clockimg = Timer09
+        break
+        case 10: this.clockimg = Timer10
+        break
+      }
   }
 
   feederstatus() {
@@ -159,13 +208,15 @@ class Stage5 extends Component {
       if (stagingRect.top > this.dogpos[1]) {
         this.dogpos[1] = stagingRect.top
       }
-      if(stagingRect.bottom - 125 < this.dogpos[1]) {
-        this.dogpos[1] = stagingRect.bottom - 125
+      if(stagingRect.bottom - 225 < this.dogpos[1]) {
+        this.dogpos[1] = stagingRect.bottom - 225
       }
   }
 
   showhidden() {
-    if (this.score > 4) this.shownext = "visible"
+    if (this.eatlog.length >= 3 && this.eatlog[this.eatlog.length -1] - this.eatlog[this.eatlog.length - 3] < 90000) {
+        this.setState({ isRunning: false });
+    }
   }
 
   decTime() {
@@ -242,6 +293,9 @@ class Stage5 extends Component {
       bowl.play()
       this.score++
       this.feeddelay = 0
+      let now = new Date()
+      this.eatlog.push(now.getTime())
+      console.log(this.eatlog)
     }
     this.toyimg = Toytilt
     console.log(this.noise)
@@ -255,8 +309,8 @@ class Stage5 extends Component {
     if (this.score > 0) {
       var munch = new Audio(Munch)
       munch.play()
-      this.score--
-      this.eat++
+      this.eat += this.score
+      this.score = 0
     }
   }
 
@@ -302,6 +356,50 @@ class Stage5 extends Component {
       },
       next: {
         visibility: this.shownext
+      },
+      timer: {
+        height: '100%',
+        width: '100%',
+        backgroundImage: `url(${this.clockimg})`,
+        backgroundRepeat: 'no-repeat',
+      },
+      timertext: {
+        fontSize: 60,
+        color: 'red',
+        position: 'relative',
+        float: 'right',
+        top: '20%',
+        left: '-50%'
+      },
+      frame1: {
+        height: '100%',
+        width: '100%',
+        backgroundImage: `url(${Frame1})`,
+        backgroundRepeat: 'no-repeat',
+      },
+      frame2: {
+        height: '100%',
+        width: '100%',
+        backgroundImage: `url(${Frame2})`,
+        backgroundRepeat: 'no-repeat',
+      },
+      frame3: {
+        height: '100%',
+        width: '100%',
+        backgroundImage: `url(${Frame3})`,
+        backgroundRepeat: 'no-repeat',
+      },
+      frame4: {
+        height: '100%',
+        width: '100%',
+        backgroundImage: `url(${Frame4})`,
+        backgroundRepeat: 'no-repeat',
+      },
+      frametext: {
+        position: 'relative',
+        float: 'right',
+        top: '10%',
+        left: '-40%'
       }
     }
 
@@ -313,13 +411,13 @@ class Stage5 extends Component {
       <div className="App">
         <Popup
           show={!this.state.isRunning}
+          next={this.props.next}
           title="Level 5"
           body="Explanation of Level 5 rules goes here."
           onStart={() => {
-            this.setState({ isRunning: true });
+            this.setState({ isRunning: false });
           }}
         />
-        <StatusSheet score={this.score} eat={this.eat} />
         <Grid
           container
           direction="row"
@@ -331,25 +429,25 @@ class Stage5 extends Component {
           <Grid container item xs={3} spacing={0} >
             <div style={styles.cell}>
               {" "}
-              Level 5 <br /> <div onClick={() => this.props.prev()}>
-                {" "}
-                prev{" "}
-              </div>{" "}
+              <div style={styles.frame1}> <span style={styles.frametext} onClick={() => this.props.prev()}>Level 5</span></div> <br />
+              {" "}
+              <div style={styles.timer} />
             </div>
           </Grid>
           <Grid container item xs={3} spacing={0} >
-            <div style={styles.cell} />
+            <div style={styles.cell}>
+              <div style={styles.frame2}> <span style={styles.frametext}>Treats <br /> earned: <br /> {this.score} </span></div>
+            </div>
           </Grid>
           <Grid container item xs={3} spacing={0} >
             <div style={styles.cell} />
           </Grid>
           <Grid container item xs={3} spacing={0} >
             <div style={styles.cell}>
-              {" "}
-              {this.clock} <br />{" "}
               <div onClick={() => this.props.next()}> next </div>{" "}
+              <div style={styles.next} onClick={() => this.props.next()}> next </div>{" "}
             </div>
-          </Grid>
+           </Grid>
 
 
           {/* proximity */}

@@ -63,7 +63,7 @@ class Stage1 extends Component {
     this.eatlog = []
     this.clockimg = Timer10
     this.state = {
-      isRunning: false,
+      isRunning: true,
       time: 0,
     }
     //function binds
@@ -195,7 +195,9 @@ class Stage1 extends Component {
   }
 
   showhidden() {
-    if (this.eatlog.length >= 3 && this.eatlog[this.eatlog.length -1] - this.eatlog[this.eatlog.length - 3] < 10000) this.shownext = "visible"
+    if (this.eatlog.length >= 3 && this.eatlog[this.eatlog.length -1] - this.eatlog[this.eatlog.length - 3] < 10000) {
+        this.setState({ isRunning: false });
+    }
   }
 
   decTime() {
@@ -388,10 +390,11 @@ class Stage1 extends Component {
       <div className="App">
         <Popup
           show={!this.state.isRunning}
-          title="Level 1"
-          body="Explanation of Level 1 rules goes here."
+          next={this.props.next}
+          title="Level 1 Cleared!"
+          body="The toy detects and will give treats when the dog is near it. Congratulations on getting your treats!."
           onStart={() => {
-            this.setState({ isRunning: true });
+            this.setState({ isRunning: false });
           }}
         />
         <Grid
@@ -412,7 +415,7 @@ class Stage1 extends Component {
           </Grid>
           <Grid container item xs={3} spacing={0} >
             <div style={styles.cell}>
-            <div style={styles.frame2}> <span style={styles.frametext}>Treats <br /> earned: <br /> {this.score} </span></div>
+              <div style={styles.frame2}> <span style={styles.frametext}>Treats <br /> earned: <br /> {this.score} </span></div>
             </div>
           </Grid>
           <Grid container item xs={3} spacing={0} >

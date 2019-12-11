@@ -36,6 +36,7 @@ class Popup extends Component {
               onClick={() => {
                 if (this.props.onStart) {
                   this.props.onStart();
+                  this.props.next()
                 }
               }}
               variant="primary"
