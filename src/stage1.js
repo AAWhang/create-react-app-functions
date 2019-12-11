@@ -23,6 +23,17 @@ import Frame1 from './img/frame1.png'
 import Frame2 from './img/frame2.png'
 import Frame3 from './img/frame3.png'
 import Frame4 from './img/frame4.png'
+import Timer00 from './img/timer00.png'
+import Timer01 from './img/timer01.png'
+import Timer02 from './img/timer02.png'
+import Timer03 from './img/timer03.png'
+import Timer04 from './img/timer04.png'
+import Timer05 from './img/timer05.png'
+import Timer06 from './img/timer06.png'
+import Timer07 from './img/timer07.png'
+import Timer08 from './img/timer08.png'
+import Timer09 from './img/timer09.png'
+import Timer10 from './img/timer10.png'
 import Blank from './img/room.jpg'
 import Popup from "./popup";
 import ReactGA from "react-ga";
@@ -50,6 +61,7 @@ class Stage1 extends Component {
     this.feederimg = Feeder
     this.toyimg = Toy
     this.eatlog = []
+    this.clockimg = Timer10
     this.state = {
       isRunning: false,
       time: 0,
@@ -81,6 +93,7 @@ class Stage1 extends Component {
       this.dogfollow()
       this.showhidden()
       this.feederstatus()
+      this.clockstatus()
       this.feeddelay++
       if (time === 600) {
         audio1.play()
@@ -103,6 +116,32 @@ class Stage1 extends Component {
   }
 
 
+  clockstatus() {
+      switch (this.clock) {
+        case 0: this.clockimg = Timer00
+        break
+        case 1: this.clockimg = Timer01
+        break
+        case 2: this.clockimg = Timer02
+        break
+        case 3: this.clockimg = Timer03
+        break
+        case 4: this.clockimg = Timer04
+        break
+        case 5: this.clockimg = Timer05
+        break
+        case 6: this.clockimg = Timer06
+        break
+        case 7: this.clockimg = Timer07
+        break
+        case 8: this.clockimg = Timer08
+        break
+        case 9: this.clockimg = Timer09
+        break
+        case 10: this.clockimg = Timer10
+        break
+      }
+  }
 
   feederstatus() {
       switch (this.score) {
@@ -150,8 +189,8 @@ class Stage1 extends Component {
       if (stagingRect.top > this.dogpos[1]) {
         this.dogpos[1] = stagingRect.top
       }
-      if(stagingRect.bottom - 125 < this.dogpos[1]) {
-        this.dogpos[1] = stagingRect.bottom - 125
+      if(stagingRect.bottom - 225 < this.dogpos[1]) {
+        this.dogpos[1] = stagingRect.bottom - 225
       }
   }
 
@@ -247,8 +286,8 @@ class Stage1 extends Component {
     if (this.score > 0) {
       var munch = new Audio(Munch)
       munch.play()
+      this.eat += this.score
       this.score = 0
-      this.eat++
     }
   }
 
@@ -298,7 +337,7 @@ class Stage1 extends Component {
       timer: {
         height: '100%',
         width: '100%',
-        backgroundImage: `url(${Timer})`,
+        backgroundImage: `url(${this.clockimg})`,
         backgroundRepeat: 'no-repeat',
       },
       timertext: {
@@ -366,11 +405,9 @@ class Stage1 extends Component {
           <Grid container item xs={3} spacing={0} >
             <div style={styles.cell}>
               {" "}
-              <div style={styles.frame1}> <span style={styles.frametext}>Level 1</span></div> <br />
+              <div style={styles.frame1}> <span style={styles.frametext} onClick={() => this.props.prev()}>Level 1</span></div> <br />
               {" "}
-              <div style={styles.timer}>
-                <span style={styles.timertext}> {this.clock} </span>
-              </div>
+              <div style={styles.timer} />
             </div>
           </Grid>
           <Grid container item xs={3} spacing={0} >
@@ -379,11 +416,10 @@ class Stage1 extends Component {
             </div>
           </Grid>
           <Grid container item xs={3} spacing={0} >
-            <div style={styles.frame3}> <span style={styles.frametext}>Treats <br /> eaten: <br /> {this.eat}</span></div>
+            <div style={styles.cell} />
           </Grid>
           <Grid container item xs={3} spacing={0} >
             <div style={styles.cell}>
-            <div style={styles.frame4}> <span style={styles.frametext}>Next <br /> prize: <br /> 3 wishes</span></div>
               <div onClick={() => this.props.next()}> next </div>{" "}
               <div style={styles.next} onClick={() => this.props.next()}> next </div>{" "}
             </div>
