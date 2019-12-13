@@ -1,9 +1,4 @@
 import React, { Component } from 'react'
-import Wander from './img/wander.jpg'
-import Bat from './img/bat.jpg'
-import Stare from './img/stare.jpg'
-import Feed from './img/feed.jpg'
-import StatusSheet from './component/statusSheet'
 import Squeak from './sound/Copy of TS5 Squeaky.mp3'
 import Bowl from './sound/food in bowl.mp3'
 import Munch from './sound/munch.mp3'
@@ -12,6 +7,9 @@ import { borders } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
 import Green from './img/dogleft.png'
 import Red from './img/dogright.png'
+import Dogwait from './img/dogwait.png'
+import Dogtouch from './img/dogtouch.png'
+import Dogeat from './img/dogeat.png'
 import Toy from './img/toy1.png'
 import Toytilt from './img/toy2.png'
 import Feeder from './img/Feeder0.png'
@@ -34,7 +32,7 @@ import Timer07 from './img/timer07.png'
 import Timer08 from './img/timer08.png'
 import Timer09 from './img/timer09.png'
 import Timer10 from './img/timer10.png'
-import Blank from './img/room.jpg'
+import Blank from './img/room.png'
 import Popup from "./popup";
 import ReactGA from "react-ga";
 
@@ -51,8 +49,7 @@ class Stage1 extends Component {
     this.mousesave = [0,0]
     this.dogsave = [0,0]
     this.dragflag = false
-    this.dogdir = Green
-    this.img = Wander
+    this.dogdir = Dogwait
     this.score = 0
     this.eat = 0
     this.box = "green"
@@ -62,6 +59,7 @@ class Stage1 extends Component {
     this.toyimg = Toy
     this.eatlog = []
     this.clockimg = Timer10
+    this.muted = false
     this.state = {
       isRunning: true,
       time: 0,
@@ -70,7 +68,6 @@ class Stage1 extends Component {
     this.stare = this.stare.bind(this)
     this.wander = this.wander.bind(this)
     this.bat = this.bat.bind(this)
-    this.feed = this.feed.bind(this)
     this.eating = this.eating.bind(this)
     this.fieldCalc = this.fieldCalc.bind(this)
   }
@@ -96,6 +93,7 @@ class Stage1 extends Component {
       this.clockstatus()
       this.feeddelay++
       if (time === 600) {
+        audio1.muted = this.muted
         audio1.play()
         time = 0;
         boxC = "green"
@@ -172,6 +170,9 @@ class Stage1 extends Component {
       this.dogpos[0] = this.dogsave[0] + this.mousepos[0] - this.mousesave[0]
       if (this.dogpos[0] < leftright) this.dogdir = Green
       if (this.dogpos[0] > leftright) this.dogdir = Red
+      if (this.dogpos[0] === leftright) this.dogdir = Dogwait
+      if(this.gamestate === 2) this.dogdir = Dogtouch
+      if(this.gamestate === 1) this.dogdir = Dogeat
       this.dogpos[1] = this.dogsave[1] + this.mousepos[1] - this.mousesave[1]
       this.boundary()
     }
@@ -248,6 +249,10 @@ class Stage1 extends Component {
     this.mousepos = [e.pageX,e.pageY]
   }
 
+  _onTouchMove(e) {
+    this.mousepos = [e.touches[0].clientX,e.touches[0].clientY]
+  }
+
   dragOn() {
     this.dragFlag = true
     this.mousesave = [...this.mousepos]
@@ -259,9 +264,15 @@ class Stage1 extends Component {
     this.dragFlag = false
   }
 
+  mutetoggle() {
+    if (this.muted === true) this.muted = false
+      else this.muted = true
+  }
+
   stare() {
     if (this.box === "green" && this.feeddelay > 120) {
       var bowl = new Audio(Bowl)
+      bowl.muted = this.muted
       bowl.play()
       this.score++
       this.feeddelay = 0
@@ -277,16 +288,17 @@ class Stage1 extends Component {
   }
 
   bat() {
+    this.dogdir = Dogtouch
     this.toyimg = Toytilt
   }
 
-  feed() {
-    this.img = Feed
-  }
+
 
   eating() {
     if (this.score > 0) {
+      this.dogdir = Dogeat
       var munch = new Audio(Munch)
+      munch.muted = this.muted
       munch.play()
       this.eat += this.score
       this.score = 0
@@ -298,10 +310,10 @@ class Stage1 extends Component {
     const styles = {
       cell: {
         height: "100%",
-        width: "100%",
+        width: "80%",
       },
       bigcell: {
-        height: "100%",
+        height: "90%",
         width: "50%"
       },
       bgCell: {
@@ -313,9 +325,9 @@ class Stage1 extends Component {
         userSelect: 'none'
       },
       insidecell: {
-        marginTop: '130%',
-        height: '30%',
-        width: '70%'
+        marginTop: '95%',
+        height: '40%',
+        width: '90%'
       },
       boxmove: {
         height: '100%',
@@ -330,37 +342,40 @@ class Stage1 extends Component {
       feeder: {
         marginTop: '80%',
         marginLeft: '120%',
-        height: '50%',
-        width: '80%'
+        height: '40%',
+        width: '100%'
       },
       next: {
         visibility: this.shownext
       },
       timer: {
-        height: '100%',
         width: '100%',
+        height: '100%',
         backgroundImage: `url(${this.clockimg})`,
         backgroundRepeat: 'no-repeat',
+        float: 'right'
       },
       timertext: {
         fontSize: 60,
         color: 'red',
         position: 'relative',
         float: 'right',
-        top: '20%',
+        top: '40%',
         left: '-50%'
       },
       frame1: {
-        height: '100%',
-        width: '100%',
-        backgroundImage: `url(${Frame1})`,
-        backgroundRepeat: 'no-repeat',
+        float: 'left',
+        marginTop: '40%',
+        marginLeft: '60%',
+        height: '80%',
+        width: '70%'
       },
       frame2: {
+        float: 'left',
+        marginTop: '30%',
+        marginLeft: '25%',
         height: '100%',
         width: '100%',
-        backgroundImage: `url(${Frame2})`,
-        backgroundRepeat: 'no-repeat',
       },
       frame3: {
         height: '100%',
@@ -403,28 +418,26 @@ class Stage1 extends Component {
           id="#staging"
           style={styles.bgCell}
           onMouseMove={this._onMouseMove.bind(this)}
+          ontouchmove={this._onTouchMove.bind(this)}
         >
-          <div onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} style={styles.boxmove} />
+          <div onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} ontouchstart={this.dragOn.bind(this)} ontouchend={this.dragOff.bind(this)} style={styles.boxmove} />
           <Grid container item xs={3} spacing={0} >
             <div style={styles.cell}>
               {" "}
-              <div style={styles.frame1}> <span style={styles.frametext} onClick={() => this.props.prev()}>Level 1</span></div> <br />
+              <div style={styles.frame1}> <span style={styles.frametext} onClick={() => this.props.prev()} ontouchend={() => this.props.prev()}>Level 1</span></div> <br />
               {" "}
               <div style={styles.timer} />
-            </div>
-          </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <div style={styles.cell}>
-              <div style={styles.frame2}> <span style={styles.frametext}>Treats <br /> earned: <br /> {this.score} </span></div>
             </div>
           </Grid>
           <Grid container item xs={3} spacing={0} >
             <div style={styles.cell} />
           </Grid>
           <Grid container item xs={3} spacing={0} >
+            <div style={styles.cell} />
+          </Grid>
+          <Grid container item xs={3} spacing={0} >
             <div style={styles.cell}>
-              <div onClick={() => this.props.next()}> next </div>{" "}
-              <div style={styles.next} onClick={() => this.props.next()}> next </div>{" "}
+              <div style={styles.frame2}> <span style={styles.frametext}>Treats <br /> earned: <br /> {this.score} </span></div>
             </div>
           </Grid>
 
@@ -434,6 +447,9 @@ class Stage1 extends Component {
             <div id="#proximity" style={styles.bigcell} >
               {/* toy box */}
               <img  src={this.toyimg} style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
+              <div onClick={() => this.props.next()}> next </div>{" "}
+              <div onClick={() => this.mutetoggle()}> mute </div>{" "}
+              <div style={styles.next} onClick={() => this.props.next()}> next </div>{" "}
             </div>
           </Grid>
 
@@ -441,7 +457,9 @@ class Stage1 extends Component {
 
           <Grid container item xs={3} spacing={0} >
             <img src={this.feederimg} id="#feeder" style={styles.feeder} />
+
           </Grid>
+
 
 
         </Grid>
