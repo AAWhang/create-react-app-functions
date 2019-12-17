@@ -185,8 +185,8 @@ class Stage1 extends Component {
       if (stagingRect.left > this.dogpos[0]) {
         this.dogpos[0] = stagingRect.left
       }
-      if (stagingRect.right - 150 < this.dogpos[0]) {
-        this.dogpos[0] = stagingRect.right - 150
+      if (stagingRect.right - 200 < this.dogpos[0]) {
+        this.dogpos[0] = stagingRect.right - 200
       }
       if (stagingRect.top > this.dogpos[1]) {
         this.dogpos[1] = stagingRect.top
@@ -330,8 +330,8 @@ class Stage1 extends Component {
         width: '90%'
       },
       boxmove: {
-        height: '30%',
-        width: '20%',
+        height: '220px',
+        width: '200px',
         float: 'left',
         position: 'absolute',
         left: this.dogpos[0],
@@ -350,10 +350,10 @@ class Stage1 extends Component {
         visibility: this.shownext
       },
       timer: {
-        marginTop: '17%',
-        marginLeft: '30%',
-        width: '40%',
-        height: '30%',
+        marginTop: '20px',
+        marginLeft: '65px',
+        width: '%',
+        height: '32%',
         backgroundRepeat: 'no-repeat',
       },
       timertext: {
@@ -366,17 +366,17 @@ class Stage1 extends Component {
       },
       frame1: {
         float: 'left',
-        marginTop: '40%',
-        marginLeft: '60%',
-        height: '80%',
-        width: '70%'
+        marginTop: '80px',
+        marginLeft: '90px',
+        height: '100px',
+        width: '100px'
       },
       frame2: {
         float: 'left',
-        marginTop: '30%',
-        marginLeft: '25%',
-        height: '100%',
-        width: '100%',
+        marginTop: '50px',
+        marginLeft: '70px',
+        height: '100px',
+        width: '100px',
       },
       frame3: {
         height: '100%',
@@ -395,7 +395,7 @@ class Stage1 extends Component {
         float: 'right',
         top: '10%',
         left: '-40%',
-        color: 'orange',
+        color: '#E2583E',
         fontWeight: 900
       }
     }
