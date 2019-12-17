@@ -1,0 +1,16 @@
+@import url(//db.onlinewebfonts.com/c/d08e118824a167b2f79eda8d213f4088?family=Globa);
+
+@font-face {
+font-family: "Globa";
+src: url("//db.onlinewebfonts.com/t/d08e118824a167b2f79eda8d213f4088.eot");
+src: url("//db.onlinewebfonts.com/t/d08e118824a167b2f79eda8d213f4088.eot?#iefix") format("embedded-opentype"),
+url("//db.onlinewebfonts.com/t/d08e118824a167b2f79eda8d213f4088.woff2") format("woff2"),
+url("//db.onlinewebfonts.com/t/d08e118824a167b2f79eda8d213f4088.woff") format("woff"),
+url("//db.onlinewebfonts.com/t/d08e118824a167b2f79eda8d213f4088.ttf") format("truetype"),
+url("//db.onlinewebfonts.com/t/d08e118824a167b2f79eda8d213f4088.svg#Globa") format("svg"); }
+
+header {
+
+ font-family: 'Globa';
+
+}

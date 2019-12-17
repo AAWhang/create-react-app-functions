@@ -9,7 +9,7 @@ import Stage5 from './stage5'
 import Stage6 from './stage6'
 import StageForm from './component/stageForm'
 import './App.css'
-import 'typeface-roboto';
+import "./index.css"
 import ReactGA from "react-ga";
 import { hotjar } from "react-hotjar";
 import GameOverSound from "./sound/Copy of Game End 1.mp3";
@@ -101,6 +101,7 @@ class App extends Component {
     return (
       <div>
         <header className="App-header">
+          <link href="//db.onlinewebfonts.com/c/d08e118824a167b2f79eda8d213f4088?family=Globa" rel="stylesheet" type="text/css"/>
           {this.state.isStarted && this.state.stage}
           {!this.state.isStarted && (
             <Landing

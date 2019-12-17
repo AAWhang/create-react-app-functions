@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Squeak from './sound/Copy of TS5 Squeaky.mp3'
 import Bowl from './sound/food in bowl.mp3'
-import Munch from './sound/munch.mp3'
+import Munch from './sound/aud_chomp.mp3'
 import Grid from '@material-ui/core/Grid'
 import { borders } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
@@ -10,8 +10,8 @@ import Red from './img/dogright.png'
 import Dogwait from './img/dogwait.png'
 import Dogtouch from './img/dogtouch.png'
 import Dogeat from './img/dogeat.png'
-import Toy from './img/toy1.png'
-import Toytilt from './img/toy2.png'
+import Toy from './img/toynew.png'
+import Toytilt from './img/toynew2.png'
 import Feeder from './img/Feeder0.png'
 import Feeder1 from './img/Feeder1.png'
 import Feeder2 from './img/Feeder2.png'
@@ -21,18 +21,18 @@ import Frame1 from './img/frame1.png'
 import Frame2 from './img/frame2.png'
 import Frame3 from './img/frame3.png'
 import Frame4 from './img/frame4.png'
-import Timer00 from './img/timer00.png'
-import Timer01 from './img/timer01.png'
-import Timer02 from './img/timer02.png'
-import Timer03 from './img/timer03.png'
-import Timer04 from './img/timer04.png'
-import Timer05 from './img/timer05.png'
-import Timer06 from './img/timer06.png'
-import Timer07 from './img/timer07.png'
-import Timer08 from './img/timer08.png'
-import Timer09 from './img/timer09.png'
-import Timer10 from './img/timer10.png'
-import Blank from './img/room.png'
+import Timer00 from './img/clock0.png'
+import Timer01 from './img/clock1.png'
+import Timer02 from './img/clock2.png'
+import Timer03 from './img/clock3.png'
+import Timer04 from './img/clock4.png'
+import Timer05 from './img/clock5.png'
+import Timer06 from './img/clock6.png'
+import Timer07 from './img/clock7.png'
+import Timer08 from './img/clock8.png'
+import Timer09 from './img/clock9.png'
+import Timer10 from './img/clock10.png'
+import Blank from './img/room1.png'
 import Popup from "./popup";
 import ReactGA from "react-ga";
 
@@ -51,6 +51,7 @@ class Stage1 extends Component {
     this.dragflag = false
     this.dogdir = Dogwait
     this.score = 0
+    this.food = 0
     this.eat = 0
     this.box = "green"
     this.shownext = "hidden"
@@ -142,7 +143,7 @@ class Stage1 extends Component {
   }
 
   feederstatus() {
-      switch (this.score) {
+      switch (this.food) {
         case 0: this.feederimg = Feeder
         break
         case 1: this.feederimg = Feeder1
@@ -275,6 +276,7 @@ class Stage1 extends Component {
       bowl.muted = this.muted
       bowl.play()
       this.score++
+      this.food++
       this.feeddelay = 0
       let now = new Date()
       this.eatlog.push(now.getTime())
@@ -288,20 +290,18 @@ class Stage1 extends Component {
   }
 
   bat() {
-    this.dogdir = Dogtouch
     this.toyimg = Toytilt
   }
 
 
 
   eating() {
-    if (this.score > 0) {
-      this.dogdir = Dogeat
+    if (this.food > 0) {
       var munch = new Audio(Munch)
       munch.muted = this.muted
       munch.play()
-      this.eat += this.score
-      this.score = 0
+      this.eat += this.food
+      this.food = 0
     }
   }
 
@@ -325,19 +325,20 @@ class Stage1 extends Component {
         userSelect: 'none'
       },
       insidecell: {
-        marginTop: '95%',
+        marginTop: '10%',
         height: '40%',
         width: '90%'
       },
       boxmove: {
-        height: '100%',
-        width: '100%',
+        height: '30%',
+        width: '20%',
         float: 'left',
         position: 'absolute',
         left: this.dogpos[0],
         top: this.dogpos[1],
         backgroundImage: `url(${this.dogdir})`,
-        backgroundRepeat: 'no-repeat'
+        backgroundRepeat: 'no-repeat',
+        zIndex:100
       },
       feeder: {
         marginTop: '80%',
@@ -349,11 +350,11 @@ class Stage1 extends Component {
         visibility: this.shownext
       },
       timer: {
-        width: '100%',
-        height: '100%',
-        backgroundImage: `url(${this.clockimg})`,
+        marginTop: '17%',
+        marginLeft: '30%',
+        width: '40%',
+        height: '30%',
         backgroundRepeat: 'no-repeat',
-        float: 'right'
       },
       timertext: {
         fontSize: 60,
@@ -393,7 +394,9 @@ class Stage1 extends Component {
         position: 'relative',
         float: 'right',
         top: '10%',
-        left: '-40%'
+        left: '-40%',
+        color: 'orange',
+        fontWeight: 900
       }
     }
 
@@ -406,8 +409,8 @@ class Stage1 extends Component {
         <Popup
           show={!this.state.isRunning}
           next={this.props.next}
-          title="Level 1 Cleared!"
-          body="The toy detects and will give treats when the dog is near it. Congratulations on getting your treats!."
+          title="Level 1 Complete"
+          body="You learned the connection between the toy and feeder."
           onStart={() => {
             this.setState({ isRunning: false });
           }}
@@ -421,12 +424,12 @@ class Stage1 extends Component {
           ontouchmove={this._onTouchMove.bind(this)}
         >
           <div onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} ontouchstart={this.dragOn.bind(this)} ontouchend={this.dragOff.bind(this)} style={styles.boxmove} />
+
           <Grid container item xs={3} spacing={0} >
             <div style={styles.cell}>
               {" "}
               <div style={styles.frame1}> <span style={styles.frametext} onClick={() => this.props.prev()} ontouchend={() => this.props.prev()}>Level 1</span></div> <br />
               {" "}
-              <div style={styles.timer} />
             </div>
           </Grid>
           <Grid container item xs={3} spacing={0} >
@@ -445,11 +448,9 @@ class Stage1 extends Component {
           {/* proximity */}
           <Grid container item xs={6} spacing={0} >
             <div id="#proximity" style={styles.bigcell} >
+                                    <img  src={this.clockimg} style={styles.timer} id="#toy"  onClick={ () => audio.play()}/>
               {/* toy box */}
               <img  src={this.toyimg} style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
-              <div onClick={() => this.props.next()}> next </div>{" "}
-              <div onClick={() => this.mutetoggle()}> mute </div>{" "}
-              <div style={styles.next} onClick={() => this.props.next()}> next </div>{" "}
             </div>
           </Grid>
 
@@ -457,7 +458,9 @@ class Stage1 extends Component {
 
           <Grid container item xs={3} spacing={0} >
             <img src={this.feederimg} id="#feeder" style={styles.feeder} />
-
+            <div onClick={() => this.props.next()}> next </div>{" "}
+            <div onClick={() => this.mutetoggle()}> mute </div>{" "}
+            <div style={styles.next} onClick={() => this.props.next()}> next </div>{" "}
           </Grid>
 
 

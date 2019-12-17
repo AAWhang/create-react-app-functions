@@ -39,3 +39,5 @@ showPopUp("prize4ProxyAnchor");
 <a href="#mailmunch-pop-844180" id="prize1ProxyAnchor" style="display: none;">prize1</a> <a href="#mailmunch-pop-844182" id="prize2ProxyAnchor" style="display: none;">prize2</a> <a href="#mailmunch-pop-844184" id="prize3ProxyAnchor" style="display: none;">prize3</a> <a href="#mailmunch-pop-844185" id="prize4ProxyAnchor" style="display: none;">prize4</a> <iframe frameborder="0" src="https://puppod-web-game.svitlanafilatova.now.sh" scrolling="no" width="800" height="670"></iframe>
 
 ```
+
+<div>Font made from <a href="http://www.onlinewebfonts.com">oNline Web Fonts</a>is licensed by CC BY 3.0</div>

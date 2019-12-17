@@ -14,7 +14,7 @@ import Green from './img/dogleft.png'
 import Red from './img/dogright.png'
 import Toy from './img/toy1.png'
 import Feeder from './img/Feeder0.png'
-import Blank from './img/room.jpg'
+import Blank from './img/room.png'
 
 class Puppy extends Component {
   constructor() {
