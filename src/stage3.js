@@ -21,17 +21,22 @@ import Frame1 from './img/frame1.png'
 import Frame2 from './img/frame2.png'
 import Frame3 from './img/frame3.png'
 import Frame4 from './img/frame4.png'
-import Timer00 from './img/clock0.png'
-import Timer01 from './img/clock1.png'
-import Timer02 from './img/clock2.png'
-import Timer03 from './img/clock3.png'
-import Timer04 from './img/clock4.png'
-import Timer05 from './img/clock5.png'
-import Timer06 from './img/clock6.png'
-import Timer07 from './img/clock7.png'
-import Timer08 from './img/clock8.png'
-import Timer09 from './img/clock9.png'
-import Timer10 from './img/clock10.png'
+import Timer00 from './img/M0.png'
+import Timer01 from './img/M0.png'
+import Timer02 from './img/M1.png'
+import Timer03 from './img/M2.png'
+import Timer04 from './img/M3.png'
+import Timer05 from './img/M4.png'
+import Timer06 from './img/M5.png'
+import Timer07 from './img/M7.png'
+import Timer08 from './img/M8.png'
+import Timer09 from './img/M9.png'
+import Timer10 from './img/M10.png'
+import HandLeft from './img/handleft.png'
+import HandMiddle from './img/handmiddle.png'
+import HandRight from './img/handright.png'
+import Mute from './img/Mute.png'
+import Unmute from './img/Unmute.png'
 import Blank from './img/room3.png'
 import Popup from "./popup";
 import ReactGA from "react-ga";
@@ -41,7 +46,7 @@ class Stage3 extends Component {
     super(props)
     this.mousex = 0
     this.mousey = 0
-    this.clock = 10
+    this.clock = 6
     this.littleClock = 0
     this.gamestate = 0
     this.dogpos = [320,500]
@@ -61,6 +66,9 @@ class Stage3 extends Component {
     this.eatlog = []
     this.clockimg = Timer10
     this.muted = false
+    this.hands = HandMiddle
+    this.muteimg = Unmute
+    this.handscount = 0
     this.state = {
       isRunning: true,
       time: 0,
@@ -92,9 +100,9 @@ class Stage3 extends Component {
       this.feederstatus()
       this.clockstatus()
       this.feeddelay++
-      if (time === 600) {
+      if (time === 360) {
         time = 0
-        this.clock = 10
+        this.clock = 6
         boxC = "green"
         audio1.muted = this.muted
         audio1.play()
@@ -113,6 +121,20 @@ class Stage3 extends Component {
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  }
+
+  handswing() {
+    switch (this.handscount % 4) {
+      case 0: this.hands = HandMiddle
+      break
+      case 1: this.hands = HandRight
+      break
+      case 2: this.hands = HandMiddle
+      break
+      case 3: this.hands = HandLeft
+      break
+    }
+    this.handscount++
   }
 
 
@@ -205,6 +227,7 @@ class Stage3 extends Component {
 
   decTime() {
     this.littleClock++
+    if (this.littleClock % 30 === 0) this.handswing()
     if (this.littleClock === 60 && this.clock > 0) {
       this.clock--
       this.littleClock = 0
@@ -226,7 +249,7 @@ class Stage3 extends Component {
         console.log("feeder")
         this.eating()
       }
-    } else if (this.dogpos[0] > toyRect.left && this.dogpos[0] < toyRect.right && this.dogpos[1] + 225 > toyRect.top && this.dogpos[1] < toyRect.bottom) {
+    } else if (this.dogpos[0] + 100 > toyRect.left && this.dogpos[0] < toyRect.right && this.dogpos[1] + 180 > toyRect.top && this.dogpos[1] - 50 < toyRect.bottom) {
       if (this.gamestate !== 2) {
         this.gamestate = 2
         console.log("toy")
@@ -266,8 +289,16 @@ class Stage3 extends Component {
   }
 
   mutetoggle() {
-    if (this.muted === true) this.muted = false
-      else this.muted = true
+    if (this.muted === true)
+      {
+        this.muted = false
+        this.muteimg = Unmute
+      }
+      else
+      {
+        this.muted = true
+        this.muteimg = Mute
+      }
   }
 
   stare() {
@@ -329,8 +360,8 @@ class Stage3 extends Component {
         width: '90%'
       },
       boxmove: {
-        height: '30%',
-        width: '20%',
+        height: '220px',
+        width: '200px',
         float: 'left',
         position: 'absolute',
         left: this.dogpos[0],
@@ -349,33 +380,33 @@ class Stage3 extends Component {
         visibility: this.shownext
       },
       timer: {
-        marginTop: '17%',
-        marginLeft: '30%',
-        width: '40%',
-        height: '30%',
-        backgroundRepeat: 'no-repeat',
+        marginTop: '17px',
+        marginLeft: '-50px',
+        position: 'absolute',
+        width: '60px',
+        height: '60px'
       },
-      timertext: {
+      timerhands: {
         fontSize: 60,
-        color: 'red',
         position: 'relative',
-        float: 'right',
-        top: '40%',
-        left: '-50%'
+        width:"55%",
+        height: "40%",
+        top: '-11px',
+        left: '35px'
       },
       frame1: {
         float: 'left',
-        marginTop: '40%',
-        marginLeft: '60%',
-        height: '80%',
-        width: '70%'
+        marginTop: '80px',
+        marginLeft: '100px',
+        height: '100px',
+        width: '100px'
       },
       frame2: {
         float: 'left',
-        marginTop: '30%',
-        marginLeft: '25%',
-        height: '100%',
-        width: '100%',
+        marginTop: '55px',
+        marginLeft: '80px',
+        height: '100px',
+        width: '100px',
       },
       frame3: {
         height: '100%',
@@ -392,10 +423,17 @@ class Stage3 extends Component {
       frametext: {
         position: 'relative',
         float: 'right',
-        top: '10%',
-        left: '-40%',
-        color: 'orange',
+        top: '0',
+        left: '-45%',
+        color: '#DD6F56',
         fontWeight: 900
+      },
+      mutebutton: {
+        position: 'absolute',
+        width: "40px",
+        height: "40px",
+        marginTop: "-190px",
+        marginLeft: "355px"
       }
     }
 
@@ -426,7 +464,7 @@ class Stage3 extends Component {
         <Grid container item xs={3} spacing={0} >
           <div style={styles.cell}>
             {" "}
-            <div style={styles.frame1}> <span style={styles.frametext} onClick={() => this.props.prev()} ontouchend={() => this.props.prev()}>Level 3</span></div> <br />
+            <div style={styles.frame1}> <span style={styles.frametext} onClick={() => this.props.prev()} ontouchend={() => this.props.prev()}>Level <br /><h1>3</h1></span></div> <br />
             {" "}
           </div>
         </Grid>
@@ -438,7 +476,7 @@ class Stage3 extends Component {
         </Grid>
         <Grid container item xs={3} spacing={0} >
           <div style={styles.cell}>
-            <div style={styles.frame2}> <span style={styles.frametext}>Treats <br /> earned: <br /> {this.score} </span></div>
+          <div style={styles.frame2}> <span style={styles.frametext}>Treats <br /> earned: <br /> <h1>{this.score}</h1> </span></div>
           </div>
         </Grid>
 
@@ -446,7 +484,8 @@ class Stage3 extends Component {
         {/* proximity */}
         <Grid container item xs={6} spacing={0} >
           <div id="#proximity" style={styles.bigcell} >
-                                  <img  src={this.clockimg} style={styles.timer} id="#toy"  onClick={ () => audio.play()}/>
+            <img  src={this.hands} style={styles.timerhands} />
+            <img  src={this.clockimg} style={styles.timer} />
             {/* toy box */}
             <img  src={this.toyimg} style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
           </div>
@@ -457,7 +496,7 @@ class Stage3 extends Component {
         <Grid container item xs={3} spacing={0} >
           <img src={this.feederimg} id="#feeder" style={styles.feeder} />
           <div onClick={() => this.props.next()}> next </div>{" "}
-          <div onClick={() => this.mutetoggle()}> mute </div>{" "}
+          <img src={this.muteimg} style={styles.mutebutton} onClick={() => this.mutetoggle()} />{" "}
           <div style={styles.next} onClick={() => this.props.next()}> next </div>{" "}
         </Grid>
 

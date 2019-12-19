@@ -41,7 +41,7 @@ class Popup extends Component {
               }}
               variant="primary"
             >
-              Next Level
+              Ne
             </Button>
           </Modal.Footer>
         </Modal>

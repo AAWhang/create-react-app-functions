@@ -8,6 +8,7 @@ import Stage4 from './stage4'
 import Stage5 from './stage5'
 import Stage6 from './stage6'
 import StageForm from './component/stageForm'
+import Bluebutton from './img/buttonblue.png'
 import './App.css'
 import "./index.css"
 import ReactGA from "react-ga";
@@ -101,7 +102,7 @@ class App extends Component {
     return (
       <div>
         <header className="App-header">
-          <link href="//db.onlinewebfonts.com/c/d08e118824a167b2f79eda8d213f4088?family=Globa" rel="stylesheet" type="text/css"/>
+          <link href="//db.onlinewebfonts.com/c/30cba635e8b77ab8380825915d86ef93?family=Globa" rel="stylesheet" type="text/css"/>
           {this.state.isStarted && this.state.stage}
           {!this.state.isStarted && (
             <Landing
@@ -111,20 +112,8 @@ class App extends Component {
             />
           )}
           {hasCurrentPrize && (
-            <button
-              onClick={() => {
-                window.parent.postMessage(this.state.prizeType.eventName, "*");
-                ReactGA.event({
-                  category: "Prizes",
-                  action: "Clicked Redeem " + this.state.prizeType.prizeName
-                });
-                gameOverSound.play();
-              }}
-              className="btn btn-primary"
-              id="redeemButton"
-            >
-              Redeem Prize
-            </button>
+              <a href="#mailmunch-pop-848453"> <img id="redeemButton" src={Bluebutton} /> </a>
+
           )}
           {hasCurrentPrize && (
             <div id="current">
