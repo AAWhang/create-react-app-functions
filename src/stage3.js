@@ -40,6 +40,7 @@ import Unmute from './img/Unmute.png'
 import Blank from './img/room3.png'
 import Popup from "./popup";
 import ReactGA from "react-ga";
+import prizes from "./prizes";
 
 class Stage3 extends Component {
   constructor(props) {
