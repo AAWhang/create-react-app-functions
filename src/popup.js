@@ -17,7 +17,7 @@ class Popup extends Component {
           <Modal.Body>{this.props.body}</Modal.Body>
 
           <Modal.Footer>
-            {this.props.prize && (
+
               <Button
                 onClick={() => {
                   window.parent.postMessage(this.props.prize.eventName, "*");
@@ -31,7 +31,7 @@ class Popup extends Component {
               >
                 Redeem Prize
               </Button>
-            )}
+
             <Button
               onClick={() => {
                 if (this.props.onStart) {

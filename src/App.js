@@ -113,8 +113,8 @@ class App extends Component {
           )}
           {hasCurrentPrize && (
               <a href="#mailmunch-pop-848453"> <img id="redeemButton" src={Bluebutton} /> </a>
-
           )}
+
           {hasCurrentPrize && (
             <div id="current">
 
