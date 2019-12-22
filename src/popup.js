@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Modal, Button } from "react-bootstrap";
 import GameOverSound from "./sound/Copy of Game End 1.mp3";
-import Bluebutton from './img/buttonblue.png'
 import ReactGA from "react-ga";
 
 var gameOverSound = new Audio(GameOverSound);
@@ -18,7 +17,7 @@ class Popup extends Component {
           <Modal.Body>{this.props.body}</Modal.Body>
 
           <Modal.Footer>
-
+            {this.props.prize && (
               <Button
                 onClick={() => {
                   window.parent.postMessage(this.props.prize.eventName, "*");
@@ -32,7 +31,7 @@ class Popup extends Component {
               >
                 Redeem Prize
               </Button>
-
+            )}
             <Button
               onClick={() => {
                 if (this.props.onStart) {
@@ -44,8 +43,6 @@ class Popup extends Component {
             >
               Next Level
             </Button>
-            <img onClick={() => {window.parent.postMessage("showPopUpForPrize1")}} id="redeemButton" src={Bluebutton} />
-
           </Modal.Footer>
         </Modal>
       </div>

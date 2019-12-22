@@ -112,7 +112,7 @@ class App extends Component {
             />
           )}
           {hasCurrentPrize && (
-               <img onClick={() => {window.parent.postMessage("showPopUpForPrize1")}} id="redeemButton" src={Bluebutton} />
+              <a href="#mailmunch-pop-848453"> <img id="redeemButton" src={Bluebutton} /> </a>
           )}
 
           {hasCurrentPrize && (
