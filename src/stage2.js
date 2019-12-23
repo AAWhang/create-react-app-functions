@@ -88,6 +88,7 @@ class Stage2 extends Component {
       if (!this.state.isRunning) {
         return;
       }
+      if (this.props.active === 0) clearInterval(this.interval);
       time++
       this.fieldCalc()
       this.decTime()

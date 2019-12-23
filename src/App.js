@@ -35,6 +35,7 @@ class App extends Component {
     super()
     this.selectedStage = 1
     this.state = {
+      active: 1,
       isStarted: false,
       stage: 1,
       prizeType: null,
@@ -66,31 +67,31 @@ class App extends Component {
     let nextPrize = null;
     switch (this.selectedStage) {
       case 0:
-        x = <Off next={this.nextStage} prev={this.prevStage} />;
+        x = <Off next={this.nextStage} prev={this.prevStage} active={this.state.active} />;
         nextPrize = prizes[3];
         break;
       case 1:
-        x = <Stage1 next={this.nextStage} prev={this.prevStage} />;
+        x = <Stage1 next={this.nextStage} prev={this.prevStage} active={this.state.active} />;
         nextPrize = prizes[3];
         break;
       case 2:
-        x = <Stage2 next={this.nextStage} prev={this.prevStage} />;
+        x = <Stage2 next={this.nextStage} prev={this.prevStage} active={this.state.active} />;
         nextPrize = prizes[3];
         break;
       case 3:
-        x = <Stage3 next={this.nextStage} prev={this.prevStage} />;
+        x = <Stage3 next={this.nextStage} prev={this.prevStage} active={this.state.active} />;
         nextPrize = prizes[4];
         break;
       case 4:
-        x = <Stage4 next={this.nextStage} prev={this.prevStage} />;
+        x = <Stage4 next={this.nextStage} prev={this.prevStage} active={this.state.active} />;
         nextPrize = prizes[5];
         break;
       case 5:
-        x = <Stage5 next={this.nextStage} prev={this.prevStage} />;
+        x = <Stage5 next={this.nextStage} prev={this.prevStage} active={this.state.active} />;
         nextPrize = prizes[6];
         break;
       case 6:
-        x = <Stage6 next={this.nextStage} prev={this.prevStage} />;
+        x = <Stage6 next={this.nextStage} prev={this.prevStage} active={this.state.active} />;
         break;
     }
     this.setState({ stage: x, prizeType: prizeType, nextPrize: nextPrize });
@@ -112,7 +113,11 @@ class App extends Component {
             />
           )}
           {hasCurrentPrize && (
-              <a href="#"> <img id="redeemButton" onClick={() => {window.parent.postMessage("showPopUpForPrize1", "*")}} src={Bluebutton} /> </a>
+              <a href="#"> <img id="redeemButton" onClick={() => {
+                this.selectedStage = 1
+                this.setState({ isStarted: false, stage: <Stage1 next={this.nextStage} prev={this.prevStage} active={this.state.active} /> });
+                clearInterval(this.interval)
+                window.parent.postMessage("showPopUpForPrize1", "*")}} src={Bluebutton} /> </a>
           )}
 
           {hasCurrentPrize && (
