@@ -21,17 +21,13 @@ import Frame1 from './img/frame1.png'
 import Frame2 from './img/frame2.png'
 import Frame3 from './img/frame3.png'
 import Frame4 from './img/frame4.png'
-import Timer00 from './img/M0.png'
-import Timer01 from './img/M0.png'
-import Timer02 from './img/M1.png'
-import Timer03 from './img/M2.png'
-import Timer04 from './img/M3.png'
-import Timer05 from './img/M4.png'
-import Timer06 from './img/M5.png'
-import Timer07 from './img/M7.png'
-import Timer08 from './img/M8.png'
-import Timer09 from './img/M9.png'
-import Timer10 from './img/M10.png'
+import Timer00 from './img/cd0.png'
+import Timer01 from './img/cd0.png'
+import Timer02 from './img/cd1.png'
+import Timer03 from './img/cd2.png'
+import Timer04 from './img/cd3.png'
+import Timer05 from './img/cd4.png'
+import Timer06 from './img/cd5.png'
 import HandLeft from './img/handleft.png'
 import HandMiddle from './img/handmiddle.png'
 import HandRight from './img/handright.png'
@@ -64,7 +60,7 @@ class Stage2 extends Component {
     this.feederimg = Feeder
     this.toyimg = Toy
     this.eatlog = []
-    this.clockimg = Timer10
+    this.clockimg = Timer06
     this.muted = false
     this.hands = HandMiddle
     this.muteimg = Unmute
@@ -150,14 +146,6 @@ class Stage2 extends Component {
         case 5: this.clockimg = Timer05
         break
         case 6: this.clockimg = Timer06
-        break
-        case 7: this.clockimg = Timer07
-        break
-        case 8: this.clockimg = Timer08
-        break
-        case 9: this.clockimg = Timer09
-        break
-        case 10: this.clockimg = Timer10
         break
       }
   }
@@ -246,7 +234,7 @@ class Stage2 extends Component {
         console.log("feeder")
         this.eating()
       }
-    } else if (this.dogpos[0] + 100 > toyRect.left && this.dogpos[0] < toyRect.right && this.dogpos[1] + 180 > toyRect.top && this.dogpos[1] - 50 < toyRect.bottom) {
+    } else if (this.dogpos[0] + 100 > toyRect.left && this.dogpos[0] + 40 < toyRect.right && this.dogpos[1] + 180 > toyRect.top && this.dogpos[1] - 50 < toyRect.bottom) {
       if (this.gamestate !== 2) {
         this.gamestate = 2
         console.log("toy")

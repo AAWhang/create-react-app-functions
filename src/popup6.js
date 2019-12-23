@@ -40,7 +40,7 @@ class Popup extends Component {
                 Redeem Prize
               </Button>
             )}
-            <img style={styles.button} onClick={() => {window.parent.postMessage("showPopUpForPrize1", "*")}} src={Bluebutton} />
+            <a href="#"><img style={styles.button} onClick={() => {window.parent.postMessage("showPopUpForPrize1", "*")}} src={Bluebutton} /></a>
 
           </Modal.Footer>
         </Modal>
