@@ -385,7 +385,7 @@ class Stage4 extends Component {
         visibility: this.shownext
       },
       timer: {
-        marginTop: '17px',
+        marginTop: '8px',
         marginLeft: '-50px',
         position: 'absolute',
         width: '60px',
@@ -396,7 +396,7 @@ class Stage4 extends Component {
         position: 'relative',
         width:"55%",
         height: "40%",
-        top: '-11px',
+        top: '-20px',
         left: '35px'
       },
       frame1: {
@@ -437,7 +437,7 @@ class Stage4 extends Component {
         position: 'absolute',
         width: "40px",
         height: "40px",
-        marginTop: "-190px",
+        marginTop: "-210px",
         marginLeft: "355px"
       }
     }
@@ -470,7 +470,7 @@ class Stage4 extends Component {
         <Grid container item xs={3} spacing={0} >
           <div style={styles.cell}>
             {" "}
-            <div style={styles.frame1}> <span style={styles.frametext} onClick={() => this.props.prev()} ontouchend={() => this.props.prev()}>Level <br /><h1>4</h1></span></div> <br />
+            <div style={styles.frame1}> <span style={styles.frametext}>Level <br /><h1>4</h1></span></div> <br />
             {" "}
           </div>
         </Grid>
@@ -501,9 +501,7 @@ class Stage4 extends Component {
 
         <Grid container item xs={3} spacing={0} >
           <img src={this.feederimg} id="#feeder" style={styles.feeder} />
-          <div onClick={() => this.props.next()}> next </div>{" "}
           <img src={this.muteimg} style={styles.mutebutton} onClick={() => this.mutetoggle()} />{" "}
-          <div style={styles.next} onClick={() => this.props.next()}> next </div>{" "}
         </Grid>
 
 
