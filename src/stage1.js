@@ -31,6 +31,7 @@ import Timer06 from './img/cd5.png'
 import HandLeft from './img/handleft.png'
 import HandMiddle from './img/handmiddle.png'
 import HandRight from './img/handright.png'
+import Speech from './img/speechbox.png'
 import Mute from './img/Mute.png'
 import Unmute from './img/Unmute.png'
 import Blank from './img/room1.png'
@@ -424,6 +425,19 @@ class Stage1 extends Component {
         height: "40px",
         marginTop: "-210px",
         marginLeft: "355px"
+      },
+      speech: {
+        position: 'absolute',
+        width: "800px",
+        height: "150px",
+        marginTop: "445px",
+        marginLeft: "0px"
+      },
+      speechbox: {
+        color: 'white',
+        position: 'absolute',
+        marginTop: '555px',
+        marginLeft: '250px'
       }
     }
 
@@ -489,7 +503,8 @@ class Stage1 extends Component {
             <img src={this.muteimg} style={styles.mutebutton} onClick={() => this.mutetoggle()} />{" "}
           </Grid>
 
-
+          <img  src={Speech} style={styles.speech} />
+          <div style={styles.speechbox}> Drag dog to play with toy.</div>
 
         </Grid>
 
