@@ -209,7 +209,7 @@ class Stage1 extends Component {
   }
 
   showhidden() {
-    if (this.eatlog.length >= 3 && this.eatlog[this.eatlog.length -1] - this.eatlog[this.eatlog.length - 3] < 10000) {
+    if (this.eatlog.length >= 3 && this.eatlog[this.eatlog.length -1] - this.eatlog[this.eatlog.length - 3] < 50000) {
         this.setState({ isRunning: false });
     }
   }

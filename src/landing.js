@@ -7,7 +7,7 @@ class Landing extends Component {
   render() {
     return (
       <div>
-        <div id="info">Some marketing info</div>
+        <div id="info"></div>
 
         <button
           className="btn btn-primary"
