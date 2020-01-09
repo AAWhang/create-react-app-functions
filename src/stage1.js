@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Squeak from './sound/Copy of TS5 Squeaky.mp3'
 import Bowl from './sound/food in bowl.mp3'
+import StartSound from "./sound/Copy of Game Start 3.mp3";
 import Munch from './sound/aud_chomp.mp3'
 import Grid from '@material-ui/core/Grid'
 import { borders } from '@material-ui/system';
@@ -85,13 +86,15 @@ class Stage1 extends Component {
     let time = 0
     let boxC = "green"
     var audio1 = new Audio(Squeak)
+    let timestartdelay = 0
+
     this.interval = setInterval(() => {
       if (!this.state.isRunning) {
         return;
       }
       if (this.props.active === 0) clearInterval(this.interval);
       time++
-
+      timestartdelay = this.startsound(timestartdelay)
       this.fieldCalc()
       this.decTime()
       this.dogfollow()
@@ -118,6 +121,15 @@ class Stage1 extends Component {
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  }
+
+  startsound(x) {
+    x++
+    if (x === 10) {
+      var startSound = new Audio(StartSound);
+      startSound.play();
+    }
+    return x
   }
 
   handswing() {
