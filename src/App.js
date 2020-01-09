@@ -36,7 +36,7 @@ class App extends Component {
     this.selectedStage = 1
     this.state = {
       active: 1,
-      isStarted: false,
+      isStarted: true,
       stage: 1,
       prizeType: null,
       nextPrize: prizes[3]
