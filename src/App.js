@@ -9,6 +9,7 @@ import Stage5 from './stage5'
 import Stage6 from './stage6'
 import StageForm from './component/stageForm'
 import Bluebutton from './img/buttonblue.png'
+import StartSound from "./sound/Copy of Game Start 3.mp3";
 import './App.css'
 import "./index.css"
 import ReactGA from "react-ga";

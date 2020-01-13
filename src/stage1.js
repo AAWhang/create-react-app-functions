@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Squeak from './sound/Copy of TS5 Squeaky.mp3'
 import Bowl from './sound/food in bowl.mp3'
-import StartSound from "./sound/Copy of Game Start 3.mp3";
 import Munch from './sound/aud_chomp.mp3'
 import Grid from '@material-ui/core/Grid'
 import { borders } from '@material-ui/system';
@@ -29,6 +28,8 @@ import Timer03 from './img/cd2.png'
 import Timer04 from './img/cd3.png'
 import Timer05 from './img/cd4.png'
 import Timer06 from './img/cd5.png'
+import Soundwave1 from './img/soundwave1.png'
+import Soundwave2 from './img/soundwave2.png'
 import HandLeft from './img/handleft.png'
 import HandMiddle from './img/handmiddle.png'
 import HandRight from './img/handright.png'
@@ -67,6 +68,8 @@ class Stage1 extends Component {
     this.hands = HandMiddle
     this.muteimg = Unmute
     this.handscount = 0
+    this.waveopac1 = 0
+    this.waveopac2 = 0
     this.state = {
       isRunning: true,
       time: 0,
@@ -86,7 +89,6 @@ class Stage1 extends Component {
     let time = 0
     let boxC = "green"
     var audio1 = new Audio(Squeak)
-    let timestartdelay = 0
 
     this.interval = setInterval(() => {
       if (!this.state.isRunning) {
@@ -94,7 +96,7 @@ class Stage1 extends Component {
       }
       if (this.props.active === 0) clearInterval(this.interval);
       time++
-      timestartdelay = this.startsound(timestartdelay)
+      this.soundwaves()
       this.fieldCalc()
       this.decTime()
       this.dogfollow()
@@ -105,6 +107,7 @@ class Stage1 extends Component {
       if (time === 360) {
         audio1.muted = this.muted
         audio1.play()
+        this.waveopac1 = 1
         time = 0;
         boxC = "green"
         this.clock = 6
@@ -123,13 +126,9 @@ class Stage1 extends Component {
     clearInterval(this.interval);
   }
 
-  startsound(x) {
-    x++
-    if (x === 10) {
-      var startSound = new Audio(StartSound);
-      startSound.play();
-    }
-    return x
+  soundwaves() {
+    this.waveopac1 -= .03
+    this.waveopac2 -= .03
   }
 
   handswing() {
@@ -308,6 +307,7 @@ class Stage1 extends Component {
       var bowl = new Audio(Bowl)
       bowl.muted = this.muted
       bowl.play()
+      this.waveopac2 = 1
       this.score++
       this.food++
       this.feeddelay = 0
@@ -450,6 +450,22 @@ class Stage1 extends Component {
         position: 'absolute',
         marginTop: '555px',
         marginLeft: '250px'
+      },
+      soundwave1: {
+        position: 'absolute',
+        width: "70px",
+        height: "70px",
+        opacity: this.waveopac1,
+        marginTop: '345px',
+        marginLeft: '110px',
+      },
+      soundwave2: {
+        position: 'absolute',
+        width: "180px",
+        height: "70px",
+        opacity: this.waveopac2,
+        marginTop: '340px',
+        marginLeft: '620px',
       }
     }
 
@@ -517,6 +533,8 @@ class Stage1 extends Component {
 
           <img  src={Speech} style={styles.speech} />
           <div style={styles.speechbox}> Drag dog to play with toy.</div>
+          <img src={Soundwave1} style={styles.soundwave1} />
+          <img src={Soundwave2} style={styles.soundwave2} />
 
         </Grid>
 

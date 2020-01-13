@@ -29,6 +29,8 @@ import Timer03 from './img/cd2.png'
 import Timer04 from './img/cd3.png'
 import Timer05 from './img/cd4.png'
 import Timer06 from './img/cd5.png'
+import Soundwave1 from './img/soundwave1.png'
+import Soundwave2 from './img/soundwave2.png'
 import HandLeft from './img/handleft.png'
 import HandMiddle from './img/handmiddle.png'
 import HandRight from './img/handright.png'
@@ -67,6 +69,8 @@ class Stage6 extends Component {
     this.hands = HandMiddle
     this.muteimg = Unmute
     this.handscount = 0
+    this.waveopac1 = 0
+    this.waveopac2 = 0
     this.state = {
       isRunning: true,
       time: 0,
@@ -93,6 +97,7 @@ class Stage6 extends Component {
       }
       if (this.props.active === 0) clearInterval(this.interval);
       time++
+      this.soundwaves()
       this.fieldCalc()
       this.decTime()
       this.dogfollow()
@@ -129,6 +134,7 @@ class Stage6 extends Component {
             this.soundalternator = 0
             mewmew.muted = this.muted
             mewmew.play()
+            this.waveopac1 = 1
           } else if (this.soundalternator === 0) {
             time = 0
             boxC = "green"
@@ -136,6 +142,7 @@ class Stage6 extends Component {
             this.soundalternator = 1
             audio1.muted = this.muted
             audio1.play()
+            this.waveopac1 = 1
           }
       }
       if (time === 120 && boxC === "green") {
@@ -152,6 +159,11 @@ class Stage6 extends Component {
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  }
+
+  soundwaves() {
+    this.waveopac1 -= .03
+    this.waveopac2 -= .03
   }
 
   handswing() {
@@ -339,6 +351,7 @@ class Stage6 extends Component {
         var bowl = new Audio(Bowl)
         bowl.muted = this.muted
         bowl.play()
+        this.waveopac2 = 1
         this.score++
         this.food++
         this.feeddelay = 0
@@ -459,6 +472,22 @@ class Stage6 extends Component {
           height: "40px",
           marginTop: "-210px",
           marginLeft: "355px"
+        },
+        soundwave1: {
+          position: 'absolute',
+          width: "70px",
+          height: "70px",
+          opacity: this.waveopac1,
+          marginTop: '345px',
+          marginLeft: '110px',
+        },
+        soundwave2: {
+          position: 'absolute',
+          width: "180px",
+          height: "70px",
+          opacity: this.waveopac2,
+          marginTop: '340px',
+          marginLeft: '620px',
         }
       }
 
@@ -523,7 +552,8 @@ class Stage6 extends Component {
             <img src={this.muteimg} style={styles.mutebutton} onClick={() => this.mutetoggle()} />{" "}
           </Grid>
 
-
+          <img src={Soundwave1} style={styles.soundwave1} />
+          <img src={Soundwave2} style={styles.soundwave2} />
 
         </Grid>
 
