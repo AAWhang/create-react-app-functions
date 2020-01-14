@@ -39,6 +39,7 @@ import Blank from './img/room3.png'
 import Popup from "./popup";
 import ReactGA from "react-ga";
 import prizes from "./prizes";
+import Bluebutton from './img/buttonblue.png'
 
 class Stage3 extends Component {
   constructor(props) {
@@ -130,11 +131,6 @@ class Stage3 extends Component {
   soundwaves() {
     this.waveopac1 -= .03
     this.waveopac2 -= .03
-    if (this.props.muted === 1)
-      {
-        this.muted = true
-        this.muteimg = Mute
-      }
   }
 
   handswing() {
@@ -457,6 +453,13 @@ class Stage3 extends Component {
         opacity: this.waveopac2,
         marginTop: '340px',
         marginLeft: '620px',
+      },
+      redeembutton: {
+        position: 'absolute',
+        width: "180px",
+        height: "50px",
+        marginTop: '40px',
+        marginLeft: '20px',
       }
     }
 
@@ -523,6 +526,11 @@ class Stage3 extends Component {
 
         <img src={Soundwave1} style={styles.soundwave1} />
         <img src={Soundwave2} style={styles.soundwave2} />
+        <a href="#"> <img style={styles.redeembutton} onClick={() => {
+          window.parent.postMessage("showPopUpForPrize1", "*")
+          this.muted = true
+          this.muteimg = Mute
+        }} src={Bluebutton} /> </a>
 
       </Grid>
 

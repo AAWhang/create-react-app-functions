@@ -39,6 +39,7 @@ import Unmute from './img/Unmute.png'
 import Blank from './img/room6.png'
 import Popup from "./popup6";
 import ReactGA from "react-ga";
+import Bluebutton from './img/buttonblue.png'
 
 class Stage6 extends Component {
   constructor(props) {
@@ -488,6 +489,13 @@ class Stage6 extends Component {
           opacity: this.waveopac2,
           marginTop: '340px',
           marginLeft: '620px',
+        },
+        redeembutton: {
+          position: 'absolute',
+          width: "180px",
+          height: "50px",
+          marginTop: '40px',
+          marginLeft: '20px',
         }
       }
 
@@ -554,6 +562,11 @@ class Stage6 extends Component {
 
           <img src={Soundwave1} style={styles.soundwave1} />
           <img src={Soundwave2} style={styles.soundwave2} />
+          <a href="#"> <img style={styles.redeembutton} onClick={() => {
+            window.parent.postMessage("showPopUpForPrize1", "*")
+            this.muted = true
+            this.muteimg = Mute
+          }} src={Bluebutton} /> </a>
 
         </Grid>
 

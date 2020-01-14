@@ -114,11 +114,7 @@ class App extends Component {
               }}
             />
           )}
-          {hasCurrentPrize && (
-              <a href="#"> <img id="redeemButton" onClick={() => {
-                this.setState({ ismuted: 1});
-                window.parent.postMessage("showPopUpForPrize1", "*")}} src={Bluebutton} /> </a>
-          )}
+
 
           {hasCurrentPrize && (
             <div id="current">
