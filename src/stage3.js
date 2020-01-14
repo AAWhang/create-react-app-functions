@@ -130,6 +130,11 @@ class Stage3 extends Component {
   soundwaves() {
     this.waveopac1 -= .03
     this.waveopac2 -= .03
+    if (this.props.muted === 1)
+      {
+        this.muted = true
+        this.muteimg = Mute
+      }
   }
 
   handswing() {

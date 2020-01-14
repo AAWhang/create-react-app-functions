@@ -40,14 +40,15 @@ class App extends Component {
       isStarted: true,
       stage: 1,
       prizeType: null,
-      nextPrize: prizes[3]
+      nextPrize: prizes[3],
+      ismuted: 0
     }
     this.nextStage = this.nextStage.bind(this)
     this.prevStage = this.prevStage.bind(this)
   }
 
   componentDidMount() {
-    this.setState({ stage: <Stage1 next={this.nextStage} prev={this.prevStage}/> })
+    this.setState({ stage: <Stage1 next={this.nextStage} prev={this.prevStage} muted={this.state.ismuted}/> })
   }
 
   nextStage() {
@@ -68,31 +69,31 @@ class App extends Component {
     let nextPrize = null;
     switch (this.selectedStage) {
       case 0:
-        x = <Off next={this.nextStage} prev={this.prevStage} active={this.state.active} />;
+        x = <Off next={this.nextStage} prev={this.prevStage} active={this.state.active} muted={this.state.ismuted} />;
         nextPrize = prizes[3];
         break;
       case 1:
-        x = <Stage1 next={this.nextStage} prev={this.prevStage} active={this.state.active} />;
+        x = <Stage1 next={this.nextStage} prev={this.prevStage} active={this.state.active} muted={this.state.ismuted} />;
         nextPrize = prizes[3];
         break;
       case 2:
-        x = <Stage2 next={this.nextStage} prev={this.prevStage} active={this.state.active} />;
+        x = <Stage2 next={this.nextStage} prev={this.prevStage} active={this.state.active} muted={this.state.ismuted} />;
         nextPrize = prizes[3];
         break;
       case 3:
-        x = <Stage3 next={this.nextStage} prev={this.prevStage} active={this.state.active} />;
+        x = <Stage3 next={this.nextStage} prev={this.prevStage} active={this.state.active} muted={this.state.ismuted} />;
         nextPrize = prizes[4];
         break;
       case 4:
-        x = <Stage4 next={this.nextStage} prev={this.prevStage} active={this.state.active} />;
+        x = <Stage4 next={this.nextStage} prev={this.prevStage} active={this.state.active} muted={this.state.ismuted} />;
         nextPrize = prizes[5];
         break;
       case 5:
-        x = <Stage5 next={this.nextStage} prev={this.prevStage} active={this.state.active} />;
+        x = <Stage5 next={this.nextStage} prev={this.prevStage} active={this.state.active} muted={this.state.ismuted} />;
         nextPrize = prizes[6];
         break;
       case 6:
-        x = <Stage6 next={this.nextStage} prev={this.prevStage} active={this.state.active} />;
+        x = <Stage6 next={this.nextStage} prev={this.prevStage} active={this.state.active} muted={this.state.ismuted} />;
         break;
     }
     this.setState({ stage: x, prizeType: prizeType, nextPrize: nextPrize });
@@ -115,9 +116,7 @@ class App extends Component {
           )}
           {hasCurrentPrize && (
               <a href="#"> <img id="redeemButton" onClick={() => {
-                this.selectedStage = 1
-                this.setState({ isStarted: false, stage: <Stage1 next={this.nextStage} prev={this.prevStage} active={this.state.active} /> });
-                clearInterval(this.interval)
+                this.setState({ ismuted: 1});
                 window.parent.postMessage("showPopUpForPrize1", "*")}} src={Bluebutton} /> </a>
           )}
 

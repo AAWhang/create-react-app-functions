@@ -39,6 +39,7 @@ import Unmute from './img/Unmute.png'
 import Blank from './img/room1.png'
 import Popup from "./popup";
 import ReactGA from "react-ga";
+import Bluebutton from './img/buttonblue.png'
 
 class Stage1 extends Component {
   constructor(props) {
@@ -466,6 +467,13 @@ class Stage1 extends Component {
         opacity: this.waveopac2,
         marginTop: '340px',
         marginLeft: '620px',
+      },
+      redeembutton: {
+        position: 'absolute',
+        width: "180px",
+        height: "50px",
+        marginTop: '40px',
+        marginLeft: '20px',
       }
     }
 
@@ -535,6 +543,8 @@ class Stage1 extends Component {
           <div style={styles.speechbox}> Drag dog to play with toy.</div>
           <img src={Soundwave1} style={styles.soundwave1} />
           <img src={Soundwave2} style={styles.soundwave2} />
+          <a href="#"> <img style={styles.redeembutton} onClick={() => {
+            window.parent.postMessage("showPopUpForPrize1", "*")}} src={Bluebutton} /> </a>
 
         </Grid>
 
