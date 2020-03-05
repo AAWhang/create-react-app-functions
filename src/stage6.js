@@ -520,8 +520,10 @@ class Stage6 extends Component {
             id="#staging"
             style={styles.bgCell}
             onMouseMove={this._onMouseMove.bind(this)}
+            onTouchMove={this._onTouchMove.bind(this)}
           >
-          <div onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} ontouchstart={this.dragOn.bind(this)} ontouchend={this.dragOff.bind(this)} style={styles.boxmove} />
+          <div  onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} onTouchStart ={this.dragOn.bind(this)} onTouchEnd={this.dragOff.bind(this)} style={styles.boxmove} />
+
 
           <Grid container item xs={3} spacing={0} >
             <div style={styles.cell}>

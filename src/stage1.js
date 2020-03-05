@@ -39,6 +39,8 @@ import Unmute from './img/Unmute.png'
 import Blank from './img/room1.png'
 import Popup from "./popup";
 import ReactGA from "react-ga";
+import DeviceOrientation, { Orientation } from 'react-screen-orientation'
+
 
 
 class Stage1 extends Component {
@@ -353,7 +355,7 @@ class Stage1 extends Component {
       bgCell: {
         backgroundImage: `url(${Blank})`,
         backgroundRepeat: 'no-repeat',
-        height: "600px",
+        height: "100%",
         width: "800px",
         color: 'black',
         userSelect: 'none'
@@ -364,6 +366,7 @@ class Stage1 extends Component {
         width: '90%'
       },
       boxmove: {
+        cursor: 'pointer',
         height: '220px',
         width: '200px',
         float: 'left',
@@ -491,9 +494,9 @@ class Stage1 extends Component {
           id="#staging"
           style={styles.bgCell}
           onMouseMove={this._onMouseMove.bind(this)}
-          ontouchmove={this._onTouchMove.bind(this)}
+          onTouchMove={this._onTouchMove.bind(this)}
         >
-          <div onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} ontouchstart={this.dragOn.bind(this)} ontouchend={this.dragOff.bind(this)} style={styles.boxmove} />
+          <div  onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} onTouchStart ={this.dragOn.bind(this)} onTouchEnd={this.dragOff.bind(this)} style={styles.boxmove} />
 
           <Grid container item xs={3} spacing={0} >
             <div style={styles.cell}>

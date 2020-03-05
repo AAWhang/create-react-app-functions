@@ -10,7 +10,8 @@
     "react-dom": "^16.11.0",
     "react-ga": "^2.7.0",
     "react-hotjar": "^2.0.4",
-    "react-scripts": "3.2.0",
+    "react-screen-orientation": "0.0.4",
+    "react-scripts": "^3.4.0",
     "typeface-roboto": "0.0.75",
     "webfontloader": "^1.6.28"
   },
