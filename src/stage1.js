@@ -344,44 +344,34 @@ class Stage1 extends Component {
   render() {
     var audio = new Audio(Squeak)
     const styles = {
-      cell: {
-        height: "100%",
-        width: "80%",
-      },
-      bigcell: {
-        height: "90%",
-        width: "50%"
-      },
       bgCell: {
         backgroundImage: `url(${Blank})`,
         backgroundRepeat: 'no-repeat',
-        height: "100%",
-        width: "800px",
+        backgroundSize: "cover",
         color: 'black',
         userSelect: 'none'
       },
       insidecell: {
         marginTop: '10%',
-        height: '40%',
-        width: '90%'
+        height: '10%',
+        width: '13%'
       },
       boxmove: {
         cursor: 'pointer',
-        height: '220px',
-        width: '200px',
+        height: '18%',
+        width: '10%',
         float: 'left',
         position: 'absolute',
         left: this.dogpos[0],
         top: this.dogpos[1],
         backgroundImage: `url(${this.dogdir})`,
         backgroundRepeat: 'no-repeat',
+        backgroundSize: "cover",
         zIndex:100
       },
       feeder: {
-        marginTop: '80%',
-        marginLeft: '120%',
-        height: '40%',
-        width: '100%'
+        height: '15%',
+        width: '10%'
       },
       next: {
         visibility: this.shownext
@@ -390,14 +380,14 @@ class Stage1 extends Component {
         marginTop: '8px',
         marginLeft: '-50px',
         position: 'absolute',
-        width: '60px',
-        height: '60px'
+        width: '6%',
+        height: '6%'
       },
       timerhands: {
         fontSize: 60,
         position: 'relative',
-        width:"55%",
-        height: "40%",
+        width:"10%",
+        height: "13%",
         top: '-20px',
         left: '35px'
       },
@@ -405,27 +395,15 @@ class Stage1 extends Component {
         float: 'left',
         marginTop: '80px',
         marginLeft: '100px',
-        height: '100px',
-        width: '100px'
+        height: '10%',
+        width: '10%'
       },
       frame2: {
         float: 'left',
         marginTop: '55px',
         marginLeft: '80px',
-        height: '100px',
-        width: '100px',
-      },
-      frame3: {
-        height: '100%',
-        width: '100%',
-        backgroundImage: `url(${Frame3})`,
-        backgroundRepeat: 'no-repeat',
-      },
-      frame4: {
-        height: '100%',
-        width: '100%',
-        backgroundImage: `url(${Frame4})`,
-        backgroundRepeat: 'no-repeat',
+        height: '10%',
+        width: '10%',
       },
       frametext: {
         position: 'relative',
@@ -436,27 +414,17 @@ class Stage1 extends Component {
         fontWeight: 900
       },
       mutebutton: {
-        position: 'absolute',
-        width: "40px",
-        height: "40px",
-        marginTop: "-210px",
-        marginLeft: "355px"
+        width: "4%",
+        height: "4%",
       },
       speech: {
-        position: 'absolute',
-        width: "800px",
-        height: "150px",
-        marginTop: "445px",
-        marginLeft: "0px"
+        width: "80%",
+        height: "15%"
       },
       speechbox: {
         color: 'white',
-        position: 'absolute',
-        marginTop: '555px',
-        marginLeft: '250px'
       },
       soundwave1: {
-        position: 'absolute',
         width: "70px",
         height: "70px",
         opacity: this.waveopac1,
@@ -464,7 +432,6 @@ class Stage1 extends Component {
         marginLeft: '110px',
       },
       soundwave2: {
-        position: 'absolute',
         width: "180px",
         height: "70px",
         opacity: this.waveopac2,
@@ -488,61 +455,39 @@ class Stage1 extends Component {
             this.setState({ isRunning: false });
           }}
         />
-        <Grid
-          container
-          direction="row"
+        <div
           id="#staging"
-          style={styles.bgCell}
+          class="table"
           onMouseMove={this._onMouseMove.bind(this)}
           onTouchMove={this._onTouchMove.bind(this)}
         >
+
+        <div class="gamestage" style={styles.bgCell}>
           <div  onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} onTouchStart ={this.dragOn.bind(this)} onTouchEnd={this.dragOff.bind(this)} style={styles.boxmove} />
-
-          <Grid container item xs={3} spacing={0} >
-            <div style={styles.cell}>
-              {" "}
               <div style={styles.frame1}> <span style={styles.frametext}>Level <br /><h1>1</h1></span></div> <br />
-              {" "}
-            </div>
-          </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <div style={styles.cell} />
-          </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <div style={styles.cell} />
-          </Grid>
-          <Grid container item xs={3} spacing={0} >
-            <div style={styles.cell}>
               <div style={styles.frame2}> <span style={styles.frametext}>Treats <br /> earned: <br /> <h1>{this.score}</h1> </span></div>
-            </div>
-          </Grid>
-
 
           {/* proximity */}
-          <Grid container item xs={6} spacing={0} >
-            <div id="#proximity" style={styles.bigcell} >
+
+            <div id="#proximity" class="proximity">
               <img  src={this.hands} style={styles.timerhands} />
               <img  src={this.clockimg} style={styles.timer} />
               {/* toy box */}
               <img  src={this.toyimg} style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
             </div>
-          </Grid>
+
+          <img src={this.feederimg} id="#feeder" class="feeder" style={styles.feeder} />
+          <img src={this.muteimg} class="mute" style={styles.mutebutton} onClick={() => this.mutetoggle()} />{" "}
 
 
-
-          <Grid container item xs={3} spacing={0} >
-            <img src={this.feederimg} id="#feeder" style={styles.feeder} />
-            <img src={this.muteimg} style={styles.mutebutton} onClick={() => this.mutetoggle()} />{" "}
-          </Grid>
-
-          <img  src={Speech} style={styles.speech} />
+          <img  src={Speech} class="speech" style={styles.speech} />
           <div style={styles.speechbox}> Drag dog to play with toy.</div>
           <img src={Soundwave1} style={styles.soundwave1} />
           <img src={Soundwave2} style={styles.soundwave2} />
 
-        </Grid>
+        </div>
 
-
+      </div>
       </div>
     )
   }

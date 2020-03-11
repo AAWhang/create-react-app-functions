@@ -63,7 +63,6 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -74,7 +73,6 @@
 
 body {
   /* min-width: 150vh; */
-  min-height: 100vh;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center;
@@ -98,4 +96,33 @@ body {
   border-radius: 3px;
   width: 180px;
   height: 180px;
+}
+
+.table {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 90px 90px 90px 90px;
+  background-color: #111111;
+
+}
+
+.mute {
+    grid-area: 1 / 5 / 1 / 5;
+}
+
+.feeder {
+    grid-area: 2 / 7 / 2 / 7;
+}
+
+.proximity {
+    grid-area: 2 / 1 / 2 / 1;
+    margin-top: -67px;
+}
+
+.gamestage {
+  grid-area: 1 / 2 / 4 / 11;
+}
+
+.speech {
+  grid-area: 4 / 1 / 5 / 11;
 }
