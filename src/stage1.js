@@ -37,6 +37,20 @@ import Speech from './img/speechbox.png'
 import Mute from './img/Mute.png'
 import Unmute from './img/Unmute.png'
 import Blank from './img/room1.png'
+
+import FeederBlink from './img/v2/blink.gif'
+import FeederDispense from './img/v2/dispense.gif'
+import FeederIdle from './img/v2/feeder1.png'
+import FeederLight from './img/v2/feeder2.png'
+
+import ToyIdle from './img/v2/toy1.png'
+import ToyLight from './img/v2/toy2.png'
+import ToySound from './img/v2/toy3.png'
+import ToyTiltIdle from './img/v2/toy4.png'
+import ToyTiltLight from './img/v2/toy5.png'
+import DogEating  from './img/v2/dog-eatingpng.png'
+import DogYum from './img/v2/yumpng.png'
+
 import Popup from "./popup";
 import ReactGA from "react-ga";
 import DeviceOrientation, { Orientation } from 'react-screen-orientation'
@@ -57,6 +71,9 @@ class Stage1 extends Component {
     this.dogsave = [0,0]
     this.dragflag = false
     this.dogdir = Dogwait
+    this.dogeat = Dogeat
+    this.dogate = false
+    this.dogeattimer = 0
     this.score = 0
     this.food = 0
     this.eat = 0
@@ -64,7 +81,7 @@ class Stage1 extends Component {
     this.shownext = "hidden"
     this.feeddelay = 0
     this.feederimg = Feeder
-    this.toyimg = Toy
+    this.toyimg = ToyIdle
     this.eatlog = []
     this.clockimg = Timer06
     this.muted = false
@@ -107,6 +124,7 @@ class Stage1 extends Component {
       this.feederstatus()
       this.clockstatus()
       this.feeddelay++
+      this.dogeattimer++
       if (time === 360) {
         audio1.muted = this.muted
         audio1.play()
@@ -170,13 +188,13 @@ class Stage1 extends Component {
 
   feederstatus() {
       switch (this.food) {
-        case 0: this.feederimg = Feeder
+        case 0: this.feederimg = FeederBlink
         break
-        case 1: this.feederimg = Feeder1
+        case 1: this.feederimg = FeederDispense
         break
-        case 2: this.feederimg = Feeder2
+        case 2: this.feederimg = FeederDispense
         break
-        case 3: this.feederimg = Feeder3
+        case 3: this.feederimg = FeederDispense
         break
       }
   }
@@ -199,7 +217,12 @@ class Stage1 extends Component {
       if (this.dogpos[0] > leftright) this.dogdir = Red
       if (this.dogpos[0] === leftright) this.dogdir = Dogwait
       if(this.gamestate === 2) this.dogdir = Dogtouch
-      if(this.gamestate === 1) this.dogdir = Dogeat
+      if(this.gamestate === 1) {
+        this.eating()
+        this.dogdir = this.dogeat
+        if (this.dogeattimer < 20 && this.dogate === true) this.dogeat = DogEating
+          else if (this.dogate === true) this.dogeat = DogYum
+      }
       this.dogpos[1] = this.dogsave[1] + this.mousepos[1] - this.mousesave[1]
       this.boundary()
     }
@@ -251,7 +274,6 @@ class Stage1 extends Component {
       if (this.gamestate !== 1) {
         this.gamestate = 1
         console.log("feeder")
-        this.eating()
       }
     } else if (this.dogpos[0] + 100 > toyRect.left && this.dogpos[0] + 40 < toyRect.right && this.dogpos[1] + 180 > toyRect.top && this.dogpos[1] - 50 < toyRect.bottom) {
       if (this.gamestate !== 2) {
@@ -267,6 +289,8 @@ class Stage1 extends Component {
       }
     } else {
       this.gamestate = 0
+      this.dogeat = Dogeat
+      this.dogate = false
       console.log("wander")
       this.wander()
     }
@@ -318,15 +342,15 @@ class Stage1 extends Component {
       this.eatlog.push(now.getTime())
       console.log(this.eatlog)
     }
-    this.toyimg = Toy
+    this.toyimg = ToyIdle
   }
 
   wander() {
-    this.toyimg = Toy
+    this.toyimg = ToyIdle
   }
 
   bat() {
-    this.toyimg = Toytilt
+    this.toyimg = ToyTiltLight
   }
 
 
@@ -338,40 +362,51 @@ class Stage1 extends Component {
       munch.play()
       this.eat += this.food
       this.food = 0
+      this.dogeattimer = 0
+      this.dogate = true
     }
   }
 
   render() {
     var audio = new Audio(Squeak)
     const styles = {
+      cell: {
+        height: "100%",
+        width: "80%",
+      },
+      bigcell: {
+        height: "90%",
+        width: "50%"
+      },
       bgCell: {
         backgroundImage: `url(${Blank})`,
         backgroundRepeat: 'no-repeat',
-        backgroundSize: "cover",
+        height: "600px",
+        width: "800px",
         color: 'black',
         userSelect: 'none'
       },
       insidecell: {
         marginTop: '10%',
-        height: '10%',
-        width: '13%'
+        height: '40%',
+        width: '90%'
       },
       boxmove: {
-        cursor: 'pointer',
-        height: '18%',
-        width: '10%',
+        height: '220px',
+        width: '200px',
         float: 'left',
         position: 'absolute',
         left: this.dogpos[0],
         top: this.dogpos[1],
         backgroundImage: `url(${this.dogdir})`,
         backgroundRepeat: 'no-repeat',
-        backgroundSize: "cover",
         zIndex:100
       },
       feeder: {
-        height: '15%',
-        width: '10%'
+        marginTop: '90%',
+        marginLeft: '80%',
+        height: '40%',
+        width: '100%'
       },
       next: {
         visibility: this.shownext
@@ -380,14 +415,14 @@ class Stage1 extends Component {
         marginTop: '8px',
         marginLeft: '-50px',
         position: 'absolute',
-        width: '6%',
-        height: '6%'
+        width: '60px',
+        height: '60px'
       },
       timerhands: {
         fontSize: 60,
         position: 'relative',
-        width:"10%",
-        height: "13%",
+        width:"55%",
+        height: "40%",
         top: '-20px',
         left: '35px'
       },
@@ -395,15 +430,27 @@ class Stage1 extends Component {
         float: 'left',
         marginTop: '80px',
         marginLeft: '100px',
-        height: '10%',
-        width: '10%'
+        height: '100px',
+        width: '100px'
       },
       frame2: {
         float: 'left',
         marginTop: '55px',
         marginLeft: '80px',
-        height: '10%',
-        width: '10%',
+        height: '100px',
+        width: '100px',
+      },
+      frame3: {
+        height: '100%',
+        width: '100%',
+        backgroundImage: `url(${Frame3})`,
+        backgroundRepeat: 'no-repeat',
+      },
+      frame4: {
+        height: '100%',
+        width: '100%',
+        backgroundImage: `url(${Frame4})`,
+        backgroundRepeat: 'no-repeat',
       },
       frametext: {
         position: 'relative',
@@ -414,17 +461,14 @@ class Stage1 extends Component {
         fontWeight: 900
       },
       mutebutton: {
-        width: "4%",
-        height: "4%",
-      },
-      speech: {
-        width: "80%",
-        height: "15%"
-      },
-      speechbox: {
-        color: 'white',
+        position: 'absolute',
+        width: "40px",
+        height: "40px",
+        marginTop: "-210px",
+        marginLeft: "355px"
       },
       soundwave1: {
+        position: 'absolute',
         width: "70px",
         height: "70px",
         opacity: this.waveopac1,
@@ -432,6 +476,7 @@ class Stage1 extends Component {
         marginLeft: '110px',
       },
       soundwave2: {
+        position: 'absolute',
         width: "180px",
         height: "70px",
         opacity: this.waveopac2,
@@ -450,45 +495,64 @@ class Stage1 extends Component {
           show={!this.state.isRunning}
           next={this.props.next}
           title="Level 1 Complete"
-          body="You learned the connection between the toy and feeder."
+          body="You learned that touching the toy = rewards."
           onStart={() => {
             this.setState({ isRunning: false });
           }}
         />
-        <div
+        <Grid
+          container
+          direction="row"
           id="#staging"
-          class="table"
+          style={styles.bgCell}
           onMouseMove={this._onMouseMove.bind(this)}
           onTouchMove={this._onTouchMove.bind(this)}
         >
+        <div onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} onTouchStart={this.dragOn.bind(this)} onTouchEnd={this.dragOff.bind(this)} style={styles.boxmove} />
 
-        <div class="gamestage" style={styles.bgCell}>
-          <div  onMouseDown={this.dragOn.bind(this)} onMouseUp={this.dragOff.bind(this)} onTouchStart ={this.dragOn.bind(this)} onTouchEnd={this.dragOff.bind(this)} style={styles.boxmove} />
-              <div style={styles.frame1}> <span style={styles.frametext}>Level <br /><h1>1</h1></span></div> <br />
-              <div style={styles.frame2}> <span style={styles.frametext}>Treats <br /> earned: <br /> <h1>{this.score}</h1> </span></div>
+        <Grid container item xs={3} spacing={0} >
+          <div style={styles.cell}>
+            {" "}
+            <div style={styles.frame1}> <span style={styles.frametext}>Level <br /><h1>1</h1></span></div> <br />
+            {" "}
+          </div>
+        </Grid>
+        <Grid container item xs={3} spacing={0} >
+          <div style={styles.cell} />
+        </Grid>
+        <Grid container item xs={3} spacing={0} >
+          <div style={styles.cell} />
+        </Grid>
+        <Grid container item xs={3} spacing={0} >
+          <div style={styles.cell}>
+          <div style={styles.frame2}> <span style={styles.frametext}>Treats <br /> earned: <br /> <h1>{this.score}</h1> </span></div>
+          </div>
+        </Grid>
 
-          {/* proximity */}
 
-            <div id="#proximity" class="proximity">
-              <img  src={this.hands} style={styles.timerhands} />
-              <img  src={this.clockimg} style={styles.timer} />
-              {/* toy box */}
-              <img  src={this.toyimg} style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
-            </div>
+        {/* proximity */}
+        <Grid container item xs={6} spacing={0} >
+          <div id="#proximity" style={styles.bigcell} >
+            <img  src={this.hands} style={styles.timerhands} />
+            <img  src={this.clockimg} style={styles.timer} />
+            {/* toy box */}
+            <img  src={this.toyimg} style={styles.insidecell} id="#toy"  onClick={ () => audio.play()}/>
+          </div>
+        </Grid>
 
-          <img src={this.feederimg} id="#feeder" class="feeder" style={styles.feeder} />
-          <img src={this.muteimg} class="mute" style={styles.mutebutton} onClick={() => this.mutetoggle()} />{" "}
 
 
-          <img  src={Speech} class="speech" style={styles.speech} />
-          <div style={styles.speechbox}> Drag dog to play with toy.</div>
-          <img src={Soundwave1} style={styles.soundwave1} />
-          <img src={Soundwave2} style={styles.soundwave2} />
+        <Grid container item xs={3} spacing={0} >
+          <img src={this.feederimg} id="#feeder" style={styles.feeder} />
+          <img src={this.muteimg} style={styles.mutebutton} onClick={() => this.mutetoggle()} />{" "}
+        </Grid>
 
-        </div>
+        <img src={Soundwave1} style={styles.soundwave1} />
+        <img src={Soundwave2} style={styles.soundwave2} />
+      </Grid>
 
-      </div>
-      </div>
+
+    </div>
     )
   }
 }
