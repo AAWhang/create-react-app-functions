@@ -43,11 +43,11 @@ import FeederDispense from './img/v2/dispense.gif'
 import FeederIdle from './img/v2/feeder1.png'
 import FeederLight from './img/v2/feeder2.png'
 
-import ToyIdle from './img/v2/toy1.png'
+import ToyIdle from './img/v2/toy.gif'
 import ToyLight from './img/v2/toy2.png'
 import ToySound from './img/v2/toy3.png'
-import ToyTiltIdle from './img/v2/toy4.png'
-import ToyTiltLight from './img/v2/toy5.png'
+import ToyTiltIdle from './img/v2/toytouched.gif'
+import ToyTiltLight from './img/v2/toytouched.gif'
 import DogEating  from './img/v2/dog-eatingpng.png'
 import DogYum from './img/v2/yumpng.png'
 
@@ -458,7 +458,8 @@ class Stage1 extends Component {
         top: '0',
         left: '-45%',
         color: '#DD6F56',
-        fontWeight: 900
+        fontWeight: 900,
+        fontSize: '25px'
       },
       mutebutton: {
         position: 'absolute',
