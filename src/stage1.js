@@ -53,7 +53,6 @@ import DogYum from './img/v2/yumpng.png'
 
 import Popup from "./popup";
 import ReactGA from "react-ga";
-import DeviceOrientation, { Orientation } from 'react-screen-orientation'
 
 
 
@@ -71,16 +70,18 @@ class Stage1 extends Component {
     this.dogsave = [0,0]
     this.dragflag = false
     this.dogdir = Dogwait
+
     this.dogeat = Dogeat
     this.dogate = false
     this.dogeattimer = 0
+
     this.score = 0
     this.food = 0
     this.eat = 0
     this.box = "green"
     this.shownext = "hidden"
     this.feeddelay = 0
-    this.feederimg = Feeder
+    this.feederimg = FeederIdle
     this.toyimg = ToyIdle
     this.eatlog = []
     this.clockimg = Timer06
@@ -330,6 +331,14 @@ class Stage1 extends Component {
   }
 
   stare() {
+    this.toyimg = ToyIdle
+  }
+
+  wander() {
+    this.toyimg = ToyIdle
+  }
+
+  bat() {
     if (this.box === "green" && this.feeddelay > 120) {
       var bowl = new Audio(Bowl)
       bowl.muted = this.muted
@@ -342,15 +351,7 @@ class Stage1 extends Component {
       this.eatlog.push(now.getTime())
       console.log(this.eatlog)
     }
-    this.toyimg = ToyIdle
-  }
-
-  wander() {
-    this.toyimg = ToyIdle
-  }
-
-  bat() {
-    this.toyimg = ToyTiltLight
+    this.toyimg = ToyTiltIdle
   }
 
 
@@ -389,7 +390,7 @@ class Stage1 extends Component {
       insidecell: {
         marginTop: '10%',
         height: '40%',
-        width: '90%'
+        width: '70%'
       },
       boxmove: {
         height: '220px',
@@ -403,7 +404,7 @@ class Stage1 extends Component {
         zIndex:100
       },
       feeder: {
-        marginTop: '90%',
+        marginTop: '70%',
         marginLeft: '80%',
         height: '40%',
         width: '100%'
@@ -412,7 +413,7 @@ class Stage1 extends Component {
         visibility: this.shownext
       },
       timer: {
-        marginTop: '8px',
+        marginTop: '-5px',
         marginLeft: '-50px',
         position: 'absolute',
         width: '60px',
@@ -423,7 +424,7 @@ class Stage1 extends Component {
         position: 'relative',
         width:"55%",
         height: "40%",
-        top: '-20px',
+        top: '-30px',
         left: '35px'
       },
       frame1: {

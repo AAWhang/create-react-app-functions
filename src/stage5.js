@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Squeak from './sound/Copy of TS5 Squeaky.mp3'
 import Bowl from './sound/food in bowl.mp3'
 import Munch from './sound/aud_chomp.mp3'
-import Meow from './sound/Copy of AlleyCat.wav'
 import Grid from '@material-ui/core/Grid'
 import { borders } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
@@ -34,12 +33,30 @@ import Soundwave2 from './img/soundwave2.png'
 import HandLeft from './img/handleft.png'
 import HandMiddle from './img/handmiddle.png'
 import HandRight from './img/handright.png'
+import Speech from './img/speechbox.png'
 import Mute from './img/Mute.png'
 import Unmute from './img/Unmute.png'
 import Blank from './img/room5.png'
+
+import FeederBlink from './img/v2/blink.gif'
+import FeederDispense from './img/v2/dispense.gif'
+import FeederIdle from './img/v2/feeder1.png'
+import FeederLight from './img/v2/feeder2.png'
+
+import ToyIdle from './img/v2/toy.gif'
+import ToyLight from './img/v2/toy2.png'
+import ToySound from './img/v2/toy3.png'
+import ToyTiltIdle from './img/v2/toytouched.gif'
+import ToyTiltLight from './img/v2/toytouched.gif'
+import DogEating  from './img/v2/dog-eatingpng.png'
+import DogYum from './img/v2/yumpng.png'
+
 import Popup from "./popup";
 import ReactGA from "react-ga";
+import prizes from "./prizes";
 import Bluebutton from './img/buttonblue.png'
+
+import Meow from './sound/Copy of AlleyCat.wav'
 
 class Stage5 extends Component {
   constructor(props) {
@@ -55,14 +72,19 @@ class Stage5 extends Component {
     this.dogsave = [0,0]
     this.dragflag = false
     this.dogdir = Dogwait
+
+    this.dogeat = Dogeat
+    this.dogate = false
+    this.dogeattimer = 0
+
     this.score = 0
     this.food = 0
     this.eat = 0
     this.box = "green"
     this.shownext = "hidden"
     this.feeddelay = 0
-    this.feederimg = Feeder
-    this.toyimg = Toy
+    this.feederimg = FeederIdle
+    this.toyimg = ToyIdle
     this.eatlog = []
     this.clockimg = Timer06
     this.muted = false
@@ -72,6 +94,7 @@ class Stage5 extends Component {
     this.handscount = 0
     this.waveopac1 = 0
     this.waveopac2 = 0
+    this.noise = ""
     this.state = {
       isRunning: true,
       time: 0,
@@ -90,6 +113,8 @@ class Stage5 extends Component {
     this.dogpos = [stagingRect.left + 330,stagingRect.top + 300]
     let time = 0
     let boxC = "blue"
+    var audio1 = new Audio(Squeak)
+    var mewmew = new Audio(Meow)
     this.interval = setInterval(() => {
       if (!this.state.isRunning) {
         return;
@@ -104,26 +129,42 @@ class Stage5 extends Component {
       this.feederstatus()
       this.clockstatus()
       this.feeddelay++
-      let noisecheck = this.noise
+      this.dogeattimer++
+      if (time === 100) {
+        let rand = Math.floor(Math.random() * Math.floor(4))
+        console.log(rand)
+        if (rand === 0)
+          {
+            mewmew.muted = this.muted
+            mewmew.play()
+          }
+        }
+        if (time === 200) {
+          let rand = Math.floor(Math.random() * Math.floor(4))
+          console.log(rand)
+          if (rand === 0)
+            {
+              mewmew.muted = this.muted
+              mewmew.play()
+            }
+          }
+
       if (time === 360) {
-        if (noisecheck === "lock") this.soundalternator = 1
+        let rand = Math.floor(Math.random() * Math.floor(2))
+        console.log(rand)
         if (this.soundalternator === 1)
           {
             time = 0
-            noisecheck = "meow"
             this.clock = 6
             this.soundalternator = 0
-            let mewmew = new Audio(Meow)
             mewmew.muted = this.muted
             mewmew.play()
             this.waveopac1 = 1
           } else if (this.soundalternator === 0) {
             time = 0
             boxC = "green"
-            noisecheck = "squeak"
             this.clock = 6
             this.soundalternator = 1
-            let audio1 = new Audio(Squeak)
             audio1.muted = this.muted
             audio1.play()
             this.waveopac1 = 1
@@ -133,9 +174,7 @@ class Stage5 extends Component {
         boxC = "blue"
       }
       this.box = boxC
-      this.noise = noisecheck
-      this.setState( { timer: time })
-      console.log(this.noise)
+      this.setState({ time: time })
     }, 17)
     ReactGA.event({
       category: "Levels",
@@ -187,16 +226,16 @@ class Stage5 extends Component {
   }
 
   feederstatus() {
-      switch (this.food) {
-        case 0: this.feederimg = Feeder
-        break
-        case 1: this.feederimg = Feeder1
-        break
-        case 2: this.feederimg = Feeder2
-        break
-        case 3: this.feederimg = Feeder3
-        break
-      }
+    switch (this.food) {
+      case 0: this.feederimg = FeederBlink
+      break
+      case 1: this.feederimg = FeederDispense
+      break
+      case 2: this.feederimg = FeederDispense
+      break
+      case 3: this.feederimg = FeederDispense
+      break
+    }
   }
 
   dogfollow() {
@@ -217,7 +256,12 @@ class Stage5 extends Component {
       if (this.dogpos[0] > leftright) this.dogdir = Red
       if (this.dogpos[0] === leftright) this.dogdir = Dogwait
       if(this.gamestate === 2) this.dogdir = Dogtouch
-      if(this.gamestate === 1) this.dogdir = Dogeat
+      if(this.gamestate === 1) {
+        this.eating()
+        this.dogdir = this.dogeat
+        if (this.dogeattimer < 20 && this.dogate === true) this.dogeat = DogEating
+          else if (this.dogate === true) this.dogeat = DogYum
+      }
       this.dogpos[1] = this.dogsave[1] + this.mousepos[1] - this.mousesave[1]
       this.boundary()
     }
@@ -324,15 +368,14 @@ class Stage5 extends Component {
   }
 
   stare() {
-    this.toyimg = Toy
+    this.toyimg = ToyIdle
   }
 
   wander() {
-    this.toyimg = Toy
+    this.toyimg = ToyIdle
   }
 
   bat() {
-    if (this.noise === "meow") this.noise = "lock"
     if (this.box === "green" && this.feeddelay > 120) {
       var bowl = new Audio(Bowl)
       bowl.muted = this.muted
@@ -345,8 +388,7 @@ class Stage5 extends Component {
       this.eatlog.push(now.getTime())
       console.log(this.eatlog)
     }
-    this.toyimg = Toytilt
-    console.log(this.noise)
+    this.toyimg = ToyTiltIdle
   }
 
 
@@ -357,6 +399,8 @@ class Stage5 extends Component {
       munch.play()
       this.eat += this.food
       this.food = 0
+      this.dogeattimer = 0
+      this.dogate = true
     }
   }
 
@@ -382,7 +426,7 @@ class Stage5 extends Component {
       insidecell: {
         marginTop: '10%',
         height: '40%',
-        width: '90%'
+        width: '70%'
       },
       boxmove: {
         height: '220px',
@@ -396,8 +440,8 @@ class Stage5 extends Component {
         zIndex:100
       },
       feeder: {
-        marginTop: '80%',
-        marginLeft: '120%',
+        marginTop: '70%',
+        marginLeft: '80%',
         height: '40%',
         width: '100%'
       },
@@ -405,7 +449,7 @@ class Stage5 extends Component {
         visibility: this.shownext
       },
       timer: {
-        marginTop: '8px',
+        marginTop: '-5px',
         marginLeft: '-50px',
         position: 'absolute',
         width: '60px',
@@ -416,7 +460,7 @@ class Stage5 extends Component {
         position: 'relative',
         width:"55%",
         height: "40%",
-        top: '-20px',
+        top: '-30px',
         left: '35px'
       },
       frame1: {
@@ -451,7 +495,8 @@ class Stage5 extends Component {
         top: '0',
         left: '-45%',
         color: '#DD6F56',
-        fontWeight: 900
+        fontWeight: 900,
+        fontSize: '25px'
       },
       mutebutton: {
         position: 'absolute',
@@ -495,7 +540,7 @@ class Stage5 extends Component {
           show={!this.state.isRunning}
           next={this.props.next}
           title="Level 5 Complete"
-          body='You learned to only touch the toy when the “squeaky" sound plays and ignore the “alley cat”. That requires self control.'
+          body="You learned how to adapt to the randomization of sounds. Congrats! You’ve completed the PupPod game.  "
           onStart={() => {
             this.setState({ isRunning: false });
           }}

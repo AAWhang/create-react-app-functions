@@ -33,9 +33,24 @@ import Soundwave2 from './img/soundwave2.png'
 import HandLeft from './img/handleft.png'
 import HandMiddle from './img/handmiddle.png'
 import HandRight from './img/handright.png'
+import Speech from './img/speechbox.png'
 import Mute from './img/Mute.png'
 import Unmute from './img/Unmute.png'
 import Blank from './img/room2.png'
+
+import FeederBlink from './img/v2/blink.gif'
+import FeederDispense from './img/v2/dispense.gif'
+import FeederIdle from './img/v2/feeder1.png'
+import FeederLight from './img/v2/feeder2.png'
+
+import ToyIdle from './img/v2/toy.gif'
+import ToyLight from './img/v2/toy2.png'
+import ToySound from './img/v2/toy3.png'
+import ToyTiltIdle from './img/v2/toytouched.gif'
+import ToyTiltLight from './img/v2/toytouched.gif'
+import DogEating  from './img/v2/dog-eatingpng.png'
+import DogYum from './img/v2/yumpng.png'
+
 import Popup from "./popup";
 import ReactGA from "react-ga";
 
@@ -53,14 +68,19 @@ class Stage2 extends Component {
     this.dogsave = [0,0]
     this.dragflag = false
     this.dogdir = Dogwait
+
+    this.dogeat = Dogeat
+    this.dogate = false
+    this.dogeattimer = 0
+
     this.score = 0
     this.food = 0
     this.eat = 0
     this.box = "green"
     this.shownext = "hidden"
     this.feeddelay = 0
-    this.feederimg = Feeder
-    this.toyimg = Toy
+    this.feederimg = FeederIdle
+    this.toyimg = ToyIdle
     this.eatlog = []
     this.clockimg = Timer06
     this.muted = false
@@ -86,7 +106,7 @@ class Stage2 extends Component {
     let stagingRect = staging.getBoundingClientRect()
     this.dogpos = [stagingRect.left + 330,stagingRect.top + 300]
     let time = 0
-    let boxC = "green"
+    let boxC = "blue"
     var audio1 = new Audio(Squeak)
     this.interval = setInterval(() => {
       if (!this.state.isRunning) {
@@ -102,14 +122,17 @@ class Stage2 extends Component {
       this.feederstatus()
       this.clockstatus()
       this.feeddelay++
+      this.dogeattimer++
       if (time === 360) {
+        time = 0
+        this.clock = 6
+        boxC = "green"
         audio1.muted = this.muted
         audio1.play()
         this.waveopac1 = 1
-        time = 0;
-        boxC = "green"
-        this.clock = 6
-
+      }
+      if (time === 120 && boxC === "green") {
+        boxC = "blue"
       }
       this.box = boxC
       this.setState({ time: time })
@@ -164,13 +187,13 @@ class Stage2 extends Component {
 
   feederstatus() {
       switch (this.food) {
-        case 0: this.feederimg = Feeder
+        case 0: this.feederimg = FeederBlink
         break
-        case 1: this.feederimg = Feeder1
+        case 1: this.feederimg = FeederDispense
         break
-        case 2: this.feederimg = Feeder2
+        case 2: this.feederimg = FeederDispense
         break
-        case 3: this.feederimg = Feeder3
+        case 3: this.feederimg = FeederDispense
         break
       }
   }
@@ -193,7 +216,12 @@ class Stage2 extends Component {
       if (this.dogpos[0] > leftright) this.dogdir = Red
       if (this.dogpos[0] === leftright) this.dogdir = Dogwait
       if(this.gamestate === 2) this.dogdir = Dogtouch
-      if(this.gamestate === 1) this.dogdir = Dogeat
+      if(this.gamestate === 1) {
+        this.eating()
+        this.dogdir = this.dogeat
+        if (this.dogeattimer < 20 && this.dogate === true) this.dogeat = DogEating
+          else if (this.dogate === true) this.dogeat = DogYum
+      }
       this.dogpos[1] = this.dogsave[1] + this.mousepos[1] - this.mousesave[1]
       this.boundary()
     }
@@ -260,6 +288,8 @@ class Stage2 extends Component {
       }
     } else {
       this.gamestate = 0
+      this.dogeat = Dogeat
+      this.dogate = false
       console.log("wander")
       this.wander()
     }
@@ -299,11 +329,11 @@ class Stage2 extends Component {
   }
 
   stare() {
-    this.toyimg = Toy
+    this.toyimg = ToyIdle
   }
 
   wander() {
-    this.toyimg = Toy
+    this.toyimg = ToyIdle
   }
 
   bat() {
@@ -319,7 +349,7 @@ class Stage2 extends Component {
       this.eatlog.push(now.getTime())
       console.log(this.eatlog)
     }
-    this.toyimg = Toytilt
+    this.toyimg = ToyTiltIdle
   }
 
 
@@ -330,6 +360,8 @@ class Stage2 extends Component {
       munch.play()
       this.eat += this.food
       this.food = 0
+      this.dogeattimer = 0
+      this.dogate = true
     }
   }
 
@@ -355,7 +387,7 @@ class Stage2 extends Component {
       insidecell: {
         marginTop: '10%',
         height: '40%',
-        width: '90%'
+        width: '70%'
       },
       boxmove: {
         height: '220px',
@@ -369,8 +401,8 @@ class Stage2 extends Component {
         zIndex:100
       },
       feeder: {
-        marginTop: '80%',
-        marginLeft: '120%',
+        marginTop: '70%',
+        marginLeft: '80%',
         height: '40%',
         width: '100%'
       },
@@ -378,7 +410,7 @@ class Stage2 extends Component {
         visibility: this.shownext
       },
       timer: {
-        marginTop: '8px',
+        marginTop: '-5px',
         marginLeft: '-50px',
         position: 'absolute',
         width: '60px',
@@ -389,7 +421,7 @@ class Stage2 extends Component {
         position: 'relative',
         width:"55%",
         height: "40%",
-        top: '-20px',
+        top: '-30px',
         left: '35px'
       },
       frame1: {
@@ -424,7 +456,8 @@ class Stage2 extends Component {
         top: '0',
         left: '-45%',
         color: '#DD6F56',
-        fontWeight: 900
+        fontWeight: 900,
+        fontSize: '25px'
       },
       mutebutton: {
         position: 'absolute',
@@ -462,7 +495,7 @@ class Stage2 extends Component {
           show={!this.state.isRunning}
           next={this.props.next}
           title="Level 2 Complete"
-          body="You learned that touching the toy = rewards."
+          body='You learned to “touch on cue” within 2 seconds of the “squeaky" sound.'
           onStart={() => {
             this.setState({ isRunning: false });
           }}

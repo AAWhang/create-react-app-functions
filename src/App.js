@@ -6,7 +6,6 @@ import Stage2 from './stage2'
 import Stage3 from './stage3'
 import Stage4 from './stage4'
 import Stage5 from './stage5'
-import Stage6 from './stage6'
 import StageForm from './component/stageForm'
 import Bluebutton from './img/buttonblue.png'
 import StartSound from "./sound/Copy of Game Start 3.mp3";
@@ -90,10 +89,6 @@ class App extends Component {
         break;
       case 5:
         x = <Stage5 next={this.nextStage} prev={this.prevStage} active={this.state.active} muted={this.state.ismuted} />;
-        nextPrize = prizes[6];
-        break;
-      case 6:
-        x = <Stage6 next={this.nextStage} prev={this.prevStage} active={this.state.active} muted={this.state.ismuted} />;
         break;
     }
     this.setState({ stage: x, prizeType: prizeType, nextPrize: nextPrize });
